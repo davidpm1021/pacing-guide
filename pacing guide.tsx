@@ -185,7 +185,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         // PLANNING AND MONEY MANAGEMENT
         { id: 'oh-6', code: 'PM.1', title: 'Budgeting Plan', description: 'Financial responsibility includes the development of a spending and savings plan (personal budget)', required: true },
         { id: 'oh-7', code: 'PM.2', title: 'Financial Institution Services', description: 'Financial institutions offer a variety of products and services to address financial responsibility', required: true },
-        { id: 'oh-8', code: 'PM.3', title: 'Financial Expert Guidance', description: 'Financial experts provide guidance and advice on a wide variety of financial issues', required: true },
+        { id: 'oh-8', code: 'Standard 8', title: 'Financial Expert Guidance', description: 'Financial experts provide guidance and advice on a wide variety of financial issues', required: true },
         { id: 'oh-9', code: 'PM.4', title: 'Tax Planning Responsibility', description: 'Planning for and paying local, state and federal taxes is a financial responsibility', required: true },
         { id: 'oh-10', code: 'PM.5', title: 'Tax Credits and Deductions', description: 'Tax payers may save money by understanding and using tax credits and deductions', required: true },
         
@@ -428,7 +428,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     // Ohio standard not addressed by NGPF curriculum
     return [{
       id: 'oh-8',
-      code: 'PM.3',
+      code: 'Standard 8',
       title: 'Financial Expert Guidance',
       description: 'Financial experts provide guidance and advice on a wide variety of financial issues',
       required: true
@@ -973,36 +973,6 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
               </span>
             </div>
           )}
-        </div>
-        
-        {selectedState !== 'ALL' && (
-          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
-            <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
-              State Standards Overview
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-              {getCurrentState().standards.slice(0, 4).map(standard => (
-                <div key={standard.id} className="flex items-center gap-2">
-                  <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
-                    standard.required 
-                      ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                  }`}>
-                    {standard.code}
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300 truncate">
-                    {standard.title}
-                  </span>
-                </div>
-              ))}
-              {getCurrentState().standards.length > 4 && (
-                <div className="text-gray-500 dark:text-gray-400 text-xs">
-                  ...and {getCurrentState().standards.length - 4} more standards
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Settings Section */}
