@@ -616,9 +616,9 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     const totalEfficiency = finalCombinations.length > 0 ? 
       finalCombinations.reduce((sum, combo) => sum + combo.efficiency, 0) / finalCombinations.length : 0;
     
-    const requiredLessons = enabledLessons.filter(lesson => lesson.required === "Yes");
-    const optionalLessons = enabledLessons.filter(lesson => lesson.required === "No");
-    const optionalWithActivities = optionalLessons.filter(lesson => 
+    const enabledRequiredLessons = enabledLessons.filter(lesson => lesson.required === "Yes");
+    const enabledOptionalLessons = enabledLessons.filter(lesson => lesson.required === "No");
+    const optionalWithActivities = enabledOptionalLessons.filter(lesson => 
       newLessonSettings[lesson.id].includeActivities
     );
     
@@ -628,10 +628,10 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
       averageEfficiency: Math.round(totalEfficiency),
       combinationsCreated: newCombinedLessons.length,
       dayUtilization: Math.round((totalPeriods / availableDays) * 100),
-      requiredLessons: requiredLessons.length,
-      optionalLessonsSelected: optionalLessons.length,
+      requiredLessons: enabledRequiredLessons.length,
+      optionalLessonsSelected: enabledOptionalLessons.length,
       optionalActivitiesIncluded: optionalWithActivities.length,
-      optionalActivitiesRemoved: optionalLessons.length - optionalWithActivities.length,
+      optionalActivitiesRemoved: enabledOptionalLessons.length - optionalWithActivities.length,
       availableDays: availableDays,
       periodsOver: Math.max(0, totalPeriods - availableDays)
     };
