@@ -210,7 +210,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         
         // RISK MANAGEMENT AND INSURANCE
         { id: 'oh-24', code: 'RM.1', title: 'Risk Management Planning', description: 'A risk management plan can protect consumers from the potential loss of personal and/or business assets or income', required: true },
-        { id: 'oh-25', code: 'RM.2', title: 'Identity Protection', description: 'Safeguards exist that help protect one\'s identity', required: true },
+        { id: 'oh-25', code: 'RM.2', title: 'Identity Protection', description: 'Safeguards exist that help protect one's identity', required: true },
         { id: 'oh-26', code: 'RM.3', title: 'Asset Diversification', description: 'Diversification of assets is one way to manage risk', required: true },
         { id: 'oh-27', code: 'RM.4', title: 'Comprehensive Insurance', description: 'A comprehensive insurance plan (health, life, disability, auto, homeowners, renters, liability, etc.) serves as a safeguard against potential loss', required: true }
       ],
