@@ -603,6 +603,67 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
       newLessonSettings[lesson.id].lessonEnabled = false;
     }
 
+    // Final reduction phase: if still over limit, remove optional activities aggressively
+    currentCombinations = createOptimalCombinations(allLessons);
+    let currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
+    
+    if (currentPeriods > availableDays) {
+      // Get all enabled optional lessons with activities
+      const enabledOptionalWithActivities = allLessons.filter(lesson => 
+        lesson.required === "No" && 
+        newLessonSettings[lesson.id].lessonEnabled && 
+        newLessonSettings[lesson.id].includeActivities
+      );
+      
+      // Sort by how many periods we save by removing activities
+      const activityRemovalSavings = enabledOptionalWithActivities.map(lesson => {
+        const withActivities = Math.ceil(lesson.totalTime / effectiveClassTime);
+        const withoutActivities = Math.ceil(lesson.nonActivityTime / effectiveClassTime);
+        const periodsSaved = withActivities - withoutActivities;
+        
+        return {
+          lesson,
+          periodsSaved,
+          newEfficiency: Math.round((lesson.nonActivityTime / effectiveClassTime / withoutActivities) * 100)
+        };
+      }).filter(item => item.periodsSaved > 0)
+        .sort((a, b) => {
+          // Prioritize removing activities that save the most periods
+          if (a.periodsSaved !== b.periodsSaved) {
+            return b.periodsSaved - a.periodsSaved;
+          }
+          // Then by efficiency after removing activities
+          return b.newEfficiency - a.newEfficiency;
+        });
+      
+      // Remove activities one by one until we fit
+      for (const item of activityRemovalSavings) {
+        if (currentPeriods <= availableDays) break;
+        
+        newLessonSettings[item.lesson.id].includeActivities = false;
+        currentCombinations = createOptimalCombinations(allLessons);
+        currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
+      }
+      
+      // If still over after removing all optional activities, start disabling optional lessons
+      if (currentPeriods > availableDays) {
+        const enabledOptionalLessons = allLessons.filter(lesson => 
+          lesson.required === "No" && newLessonSettings[lesson.id].lessonEnabled
+        );
+        
+        // Sort by total time (remove shorter lessons first to preserve more valuable content)
+        const lessonsByValue = enabledOptionalLessons.sort((a, b) => a.totalTime - b.totalTime);
+        
+        for (const lesson of lessonsByValue) {
+          if (currentPeriods <= availableDays) break;
+          
+          newLessonSettings[lesson.id].lessonEnabled = false;
+          currentCombinations = createOptimalCombinations(allLessons);
+          currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
+        }
+      }
+    }
+
     // Final calculation
     const finalCombinations = createOptimalCombinations(allLessons);
     const totalPeriods = finalCombinations.reduce((sum, combo) => sum + combo.periods, 0);
