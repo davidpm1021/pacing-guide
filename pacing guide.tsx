@@ -565,14 +565,18 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     currentCombinations = createOptimalCombinations(allLessons);
     let currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
 
-    // Phase 1: Remove optional activities to reduce periods
-    if (currentPeriods > availableDays) {
-      // Get all optional lessons with activities
+    // Phase 1: Remove optional activities to reduce periods (continue until we can't reduce more)
+    while (currentPeriods > availableDays) {
+      // Get all optional lessons that still have activities enabled
       const optionalWithActivities = allLessons.filter(lesson => 
-        lesson.required === "No" && newLessonSettings[lesson.id].includeActivities
+        lesson.required === "No" && 
+        newLessonSettings[lesson.id].lessonEnabled && 
+        newLessonSettings[lesson.id].includeActivities
       );
       
-      // Calculate savings for each activity removal
+      if (optionalWithActivities.length === 0) break; // No more activities to remove
+      
+      // Calculate savings for each activity removal (recalculate each time)
       const activitySavings = optionalWithActivities.map(lesson => {
         const withActivities = Math.ceil(lesson.totalTime / effectiveClassTime);
         const withoutActivities = Math.ceil(lesson.nonActivityTime / effectiveClassTime);
@@ -592,24 +596,24 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
           return b.efficiency - a.efficiency;
         });
 
-      // Remove activities until we're under the limit
-      for (const item of activitySavings) {
-        if (currentPeriods <= availableDays) break;
-        
-        // Remove activities from this lesson
-        newLessonSettings[item.lesson.id].includeActivities = false;
-        
-        // Recalculate with new combinations
-        currentCombinations = createOptimalCombinations(allLessons);
-        currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-      }
+      if (activitySavings.length === 0) break; // No activities save any periods
+      
+      // Remove the best activity option
+      const bestRemoval = activitySavings[0];
+      newLessonSettings[bestRemoval.lesson.id].includeActivities = false;
+      
+      // Recalculate with new combinations
+      currentCombinations = createOptimalCombinations(allLessons);
+      currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
     }
 
-    // Phase 2: If still over limit, remove optional lessons
-    if (currentPeriods > availableDays) {
+    // Phase 2: If still over limit, remove optional lessons (continue until we fit or run out)
+    while (currentPeriods > availableDays) {
       const optionalLessons = allLessons.filter(lesson => 
         lesson.required === "No" && newLessonSettings[lesson.id].lessonEnabled
       );
+      
+      if (optionalLessons.length === 0) break; // No more optional lessons to remove
       
       // Sort by value (remove shorter lessons first to preserve content)
       const lessonsByValue = optionalLessons.sort((a, b) => {
@@ -618,16 +622,13 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         return timeA - timeB; // Remove shorter lessons first
       });
       
-      for (const lesson of lessonsByValue) {
-        if (currentPeriods <= availableDays) break;
-        
-        // Disable this lesson
-        newLessonSettings[lesson.id].lessonEnabled = false;
-        
-        // Recalculate
-        currentCombinations = createOptimalCombinations(allLessons);
-        currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-      }
+      // Remove the shortest lesson
+      const lessonToRemove = lessonsByValue[0];
+      newLessonSettings[lessonToRemove.id].lessonEnabled = false;
+      
+      // Recalculate
+      currentCombinations = createOptimalCombinations(allLessons);
+      currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
     }
 
     // Final calculation
