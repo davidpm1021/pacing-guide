@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, ToggleLeft, ToggleRight, AlertTriangle, CheckCircle, Settings, Book, Link, Unlink, Moon, Sun } from 'lucide-react';
+import { Clock, ToggleLeft, ToggleRight, AlertTriangle, CheckCircle, Settings, Book, Link, Unlink, Moon, Sun, MapPin, Award } from 'lucide-react';
 
 type LessonAnalysis = {
   id: number;
@@ -41,6 +41,28 @@ type CombinedLesson = {
   efficiency: number;
 };
 
+type StateStandard = {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  required: boolean;
+};
+
+type StateLessonMapping = {
+  lessonId: number;
+  standardIds: string[];
+  required: boolean;
+  priority: 'high' | 'medium' | 'low';
+};
+
+type State = {
+  code: string;
+  name: string;
+  standards: StateStandard[];
+  lessonMappings: StateLessonMapping[];
+};
+
 type Results = {
   lessons: LessonAnalysis[];
   timeConstraints: any;
@@ -53,6 +75,64 @@ interface LessonByLessonPacingGuideProps {
 }
 
 const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPacingGuideProps) => {
+  // State standards data
+  const statesData: State[] = [
+    {
+      code: 'ALL',
+      name: 'All States (Default)',
+      standards: [],
+      lessonMappings: []
+    },
+    {
+      code: 'CA',
+      name: 'California',
+      standards: [
+        { id: 'ca-1', code: 'PFL.1.1', title: 'Financial Decision Making', description: 'Apply financial decision-making processes to financial scenarios', required: true },
+        { id: 'ca-2', code: 'PFL.1.2', title: 'Banking Services', description: 'Analyze banking services and their costs', required: true },
+        { id: 'ca-3', code: 'PFL.2.1', title: 'Investment Principles', description: 'Understand basic investment principles and risk/return', required: true },
+        { id: 'ca-4', code: 'PFL.2.2', title: 'Credit Management', description: 'Analyze credit cards, loans, and credit scores', required: true },
+        { id: 'ca-5', code: 'PFL.3.1', title: 'Career Planning', description: 'Develop career plans and understand job benefits', required: false },
+        { id: 'ca-6', code: 'PFL.4.1', title: 'Budgeting', description: 'Create and manage personal budgets', required: true }
+      ],
+      lessonMappings: [
+        { lessonId: 0, standardIds: ['ca-1'], required: true, priority: 'high' },
+        { lessonId: 3, standardIds: ['ca-2'], required: true, priority: 'high' },
+        { lessonId: 4, standardIds: ['ca-2'], required: true, priority: 'high' },
+        { lessonId: 5, standardIds: ['ca-2'], required: true, priority: 'high' },
+        { lessonId: 11, standardIds: ['ca-3'], required: true, priority: 'high' },
+        { lessonId: 13, standardIds: ['ca-3'], required: true, priority: 'high' },
+        { lessonId: 23, standardIds: ['ca-4'], required: true, priority: 'high' },
+        { lessonId: 30, standardIds: ['ca-4'], required: true, priority: 'high' },
+        { lessonId: 31, standardIds: ['ca-4'], required: true, priority: 'high' },
+        { lessonId: 40, standardIds: ['ca-5'], required: false, priority: 'medium' },
+        { lessonId: 56, standardIds: ['ca-6'], required: true, priority: 'high' }
+      ]
+    },
+    {
+      code: 'TX',
+      name: 'Texas',
+      standards: [
+        { id: 'tx-1', code: 'PF.1A', title: 'Personal Financial Literacy', description: 'Identify and analyze personal financial goals', required: true },
+        { id: 'tx-2', code: 'PF.2A', title: 'Banking and Financial Services', description: 'Compare banking services and financial institutions', required: true },
+        { id: 'tx-3', code: 'PF.3A', title: 'Investment and Retirement', description: 'Analyze investment options and retirement planning', required: true },
+        { id: 'tx-4', code: 'PF.4A', title: 'Credit and Debt', description: 'Evaluate credit and debt management strategies', required: true },
+        { id: 'tx-5', code: 'PF.5A', title: 'Insurance', description: 'Understand insurance as risk management', required: true },
+        { id: 'tx-6', code: 'PF.6A', title: 'Consumer Protection', description: 'Analyze consumer rights and protections', required: false }
+      ],
+      lessonMappings: [
+        { lessonId: 0, standardIds: ['tx-1'], required: true, priority: 'high' },
+        { lessonId: 3, standardIds: ['tx-2'], required: true, priority: 'high' },
+        { lessonId: 4, standardIds: ['tx-2'], required: true, priority: 'high' },
+        { lessonId: 11, standardIds: ['tx-3'], required: true, priority: 'high' },
+        { lessonId: 19, standardIds: ['tx-3'], required: true, priority: 'high' },
+        { lessonId: 23, standardIds: ['tx-4'], required: true, priority: 'high' },
+        { lessonId: 30, standardIds: ['tx-4'], required: true, priority: 'high' },
+        { lessonId: 46, standardIds: ['tx-5'], required: true, priority: 'high' },
+        { lessonId: 64, standardIds: ['tx-6'], required: false, priority: 'medium' }
+      ]
+    }
+  ];
+
   // Complete lesson data from CSV (all 68 lessons)
   const allLessons = [
     {id: 0, name: "Your Values and Money", unit: "Behavioral Economics", activity1: "PLAY: The Bean Game", activity2: "MOVE: Your Money Values", required: "No", nonActivityTime: 11, activityTime: 45, totalTime: 56},
@@ -125,6 +205,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     {id: 67, name: "Scams & Fraud", unit: "Consumer Skills", activity1: "PLAY: Spot the Scam Signs", activity2: "", required: "Yes", nonActivityTime: 31, activityTime: 25, totalTime: 56}
   ];
 
+  const [selectedState, setSelectedState] = useState<string>('ALL');
   const [settings, setSettings] = useState({
     classPeriodMinutes: 50,
     totalSchoolDays: 90,
@@ -152,6 +233,30 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
   const [results, setResults] = useState<Results | null>(null);
   const [optimizationResults, setOptimizationResults] = useState<any>(null);
 
+  // Helper functions for state standards
+  const getCurrentState = (): State => {
+    return statesData.find(state => state.code === selectedState) || statesData[0];
+  };
+
+  const getLessonStateMapping = (lessonId: number): StateLessonMapping | null => {
+    const currentState = getCurrentState();
+    return currentState.lessonMappings.find(mapping => mapping.lessonId === lessonId) || null;
+  };
+
+  const getLessonStandards = (lessonId: number): StateStandard[] => {
+    const mapping = getLessonStateMapping(lessonId);
+    if (!mapping) return [];
+    
+    const currentState = getCurrentState();
+    return mapping.standardIds.map(standardId => 
+      currentState.standards.find(standard => standard.id === standardId)
+    ).filter(Boolean) as StateStandard[];
+  };
+
+  const isLessonRequiredByState = (lessonId: number): boolean => {
+    const mapping = getLessonStateMapping(lessonId);
+    return mapping ? mapping.required : false;
+  };
 
   const calculateAvailableTime = () => {
     const totalLostDays = settings.assessmentDays + settings.reviewDays + settings.nonTeachingDays;
@@ -364,9 +469,32 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     };
   };
 
+  // Update lesson settings when state changes
+  useEffect(() => {
+    if (selectedState !== 'ALL') {
+      const currentState = getCurrentState();
+      const newLessonSettings = { ...lessonSettings };
+      
+      // Apply state-specific requirements
+      allLessons.forEach(lesson => {
+        const mapping = currentState.lessonMappings.find(m => m.lessonId === lesson.id);
+        if (mapping) {
+          // If lesson has state mapping, enable it and set based on state requirements
+          newLessonSettings[lesson.id] = {
+            ...newLessonSettings[lesson.id],
+            lessonEnabled: true,
+            canToggleActivities: !mapping.required && lesson.required === "No"
+          };
+        }
+      });
+      
+      setLessonSettings(newLessonSettings);
+    }
+  }, [selectedState]);
+
   useEffect(() => {
     setResults(generatePacingPlan());
-  }, [settings, lessonSettings, combinedLessons]);
+  }, [settings, lessonSettings, combinedLessons, selectedState]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -636,6 +764,68 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
           Plan your semester by checking lessons to include and combining related lessons for optimal time management
         </p>
+      </div>
+
+      {/* State Selection */}
+      <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 p-6">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <MapPin className="text-blue-600 dark:text-blue-400" size={20} />
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Select Your State:
+            </label>
+          </div>
+          <select
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          >
+            {statesData.map(state => (
+              <option key={state.code} value={state.code}>
+                {state.name}
+              </option>
+            ))}
+          </select>
+          
+          {selectedState !== 'ALL' && (
+            <div className="flex items-center gap-2 ml-4 text-sm text-blue-600 dark:text-blue-400">
+              <Award size={16} />
+              <span>
+                {getCurrentState().standards.filter(s => s.required).length} required standards,
+                {getCurrentState().standards.filter(s => !s.required).length} optional
+              </span>
+            </div>
+          )}
+        </div>
+        
+        {selectedState !== 'ALL' && (
+          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+            <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
+              State Standards Overview
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+              {getCurrentState().standards.slice(0, 4).map(standard => (
+                <div key={standard.id} className="flex items-center gap-2">
+                  <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
+                    standard.required 
+                      ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                  }`}>
+                    {standard.code}
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300 truncate">
+                    {standard.title}
+                  </span>
+                </div>
+              ))}
+              {getCurrentState().standards.length > 4 && (
+                <div className="text-gray-500 dark:text-gray-400 text-xs">
+                  ...and {getCurrentState().standards.length - 4} more standards
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Settings Section */}
@@ -967,6 +1157,110 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         </div>
       )}
 
+      {/* Standards Coverage Dashboard */}
+      {selectedState !== 'ALL' && results?.lessons && (
+        <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 p-6">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+            <Award className="text-blue-600 dark:text-blue-400" size={24} />
+            {getCurrentState().name} Standards Coverage
+          </h3>
+          
+          {(() => {
+            const currentState = getCurrentState();
+            const enabledLessons = results.lessons.filter(lesson => lesson.lessonEnabled);
+            const coveredStandardIds = new Set();
+            
+            enabledLessons.forEach(lesson => {
+              const standards = getLessonStandards(lesson.id);
+              standards.forEach(standard => coveredStandardIds.add(standard.id));
+            });
+            
+            const coveredStandards = currentState.standards.filter(s => coveredStandardIds.has(s.id));
+            const missingStandards = currentState.standards.filter(s => !coveredStandardIds.has(s.id));
+            const coveragePercentage = Math.round((coveredStandards.length / currentState.standards.length) * 100);
+            
+            return (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                    <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                      {coveragePercentage}%
+                    </div>
+                    <div className="text-sm text-green-600 dark:text-green-400">Standards Coverage</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      {coveredStandards.length} of {currentState.standards.length} standards
+                    </div>
+                  </div>
+                  
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
+                    <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                      {coveredStandards.filter(s => s.required).length}
+                    </div>
+                    <div className="text-sm text-blue-600 dark:text-blue-400">Required Standards Met</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      of {currentState.standards.filter(s => s.required).length} required
+                    </div>
+                  </div>
+                  
+                  <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-700">
+                    <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                      {missingStandards.filter(s => s.required).length}
+                    </div>
+                    <div className="text-sm text-orange-600 dark:text-orange-400">Missing Required</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      Standards not covered
+                    </div>
+                  </div>
+                </div>
+                
+                {missingStandards.filter(s => s.required).length > 0 && (
+                  <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-700">
+                    <h4 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-2 flex items-center gap-2">
+                      <AlertTriangle size={16} />
+                      Missing Required Standards
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {missingStandards.filter(s => s.required).map(standard => (
+                        <div key={standard.id} className="flex items-center gap-2 text-xs">
+                          <span className="inline-flex px-2 py-1 rounded text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200">
+                            {standard.code}
+                          </span>
+                          <span className="text-red-700 dark:text-red-300">
+                            {standard.title}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                    Covered Standards ({coveredStandards.length})
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-32 overflow-y-auto">
+                    {coveredStandards.map(standard => (
+                      <div key={standard.id} className="flex items-center gap-2 text-xs">
+                        <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
+                          standard.required 
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                            : 'bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
+                        }`}>
+                          {standard.code}
+                        </span>
+                        <span className="text-gray-700 dark:text-gray-300 truncate">
+                          {standard.title}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+
       <div className="space-y-8">
         {Object.entries(lessonsByUnit).map(([unitName, lessons]) => {
           // Only count enabled lessons for unit summaries
@@ -1015,6 +1309,9 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                     <tr>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Lesson</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                      {selectedState !== 'ALL' && (
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Standards</th>
+                      )}
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Activities</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Include Activities</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Time</th>
@@ -1059,6 +1356,34 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                                 Combined Activities
                               </span>
                             </td>
+                            {selectedState !== 'ALL' && (
+                              <td className="px-6 py-4">
+                                <div className="space-y-1">
+                                  {getLessonStandards(lesson.id).map(standard => (
+                                    <div key={standard.id} className="text-xs">
+                                      <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
+                                        standard.required 
+                                          ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                      }`}>
+                                        {standard.code}
+                                      </span>
+                                    </div>
+                                  ))}
+                                  {getLessonStandards(partner.id).map(standard => (
+                                    <div key={standard.id} className="text-xs">
+                                      <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
+                                        standard.required 
+                                          ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                      }`}>
+                                        {standard.code}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </td>
+                            )}
                             <td className="px-6 py-4">
                               <div className="text-xs text-gray-600 dark:text-gray-400">
                                 <div>• {lesson.activity1}</div>
@@ -1152,11 +1477,43 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                           </td>
                           <td className="px-6 py-4">
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              lesson.required === 'Yes' ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200'
+                              lesson.required === 'Yes' || isLessonRequiredByState(lesson.id) 
+                                ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' 
+                                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200'
                             } ${lesson.lessonEnabled === false ? 'opacity-50' : ''}`}>
-                              {lesson.required === 'Yes' ? 'Required Activity' : 'Optional Activity'}
+                              {lesson.required === 'Yes' || isLessonRequiredByState(lesson.id) ? 'Required Activity' : 'Optional Activity'}
                             </span>
+                            {isLessonRequiredByState(lesson.id) && lesson.required === 'No' && (
+                              <div className="text-xs text-red-600 dark:text-red-400 mt-1">
+                                Required by {getCurrentState().name}
+                              </div>
+                            )}
                           </td>
+                          {selectedState !== 'ALL' && (
+                            <td className="px-6 py-4">
+                              <div className="space-y-1">
+                                {getLessonStandards(lesson.id).map(standard => (
+                                  <div key={standard.id} className="text-xs">
+                                    <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
+                                      standard.required 
+                                        ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                    }`}>
+                                      {standard.code}
+                                    </span>
+                                    <span className="text-gray-600 dark:text-gray-400 ml-1" title={standard.description}>
+                                      {standard.title}
+                                    </span>
+                                  </div>
+                                ))}
+                                {getLessonStandards(lesson.id).length === 0 && (
+                                  <div className="text-xs text-gray-400 dark:text-gray-500">
+                                    No standards mapped
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          )}
                           <td className="px-6 py-4">
                             <div className={`text-xs ${lesson.lessonEnabled !== false ? 'text-gray-600 dark:text-gray-400' : 'text-gray-400 dark:text-gray-500'}`}>
                               <div>{lesson.activity1}</div>
