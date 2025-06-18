@@ -130,6 +130,85 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         { lessonId: 46, standardIds: ['tx-5'], required: true, priority: 'high' },
         { lessonId: 64, standardIds: ['tx-6'], required: false, priority: 'medium' }
       ]
+    },
+    {
+      code: 'FL',
+      name: 'Florida',
+      standards: [
+        { id: 'fl-1', code: 'SS.912.FL.1.1', title: 'Values and Financial Decisions', description: 'Evaluate and reflect on how values affect personal financial decision-making', required: true },
+        { id: 'fl-2', code: 'SS.912.FL.1.2', title: 'Cognitive Biases', description: 'Understand how cognitive biases affect personal financial decision-making', required: true },
+        { id: 'fl-3', code: 'SS.912.FL.1.3', title: 'Loss Aversion', description: 'Explain that loss aversion implies that losses are weighed more than gains', required: true },
+        { id: 'fl-4', code: 'SS.912.FL.1.5', title: 'Herd Mentality', description: 'Evaluate how herd mentality affects personal financial decision-making', required: true },
+        { id: 'fl-5', code: 'SS.912.FL.1.6', title: 'Anchoring Bias', description: 'Describe how early information can anchor financial decisions', required: true },
+        { id: 'fl-6', code: 'SS.912.FL.1.7', title: 'Confirmation Bias', description: 'Describe how people focus on information that confirms their beliefs', required: true },
+        { id: 'fl-7', code: 'SS.912.FL.1.8', title: 'Present Bias', description: 'Identify examples of how people are affected by present bias', required: true },
+        { id: 'fl-8', code: 'SS.912.FL.2.1', title: 'Career Choice Factors', description: 'Describe how people choose jobs based on income and non-income factors', required: true },
+        { id: 'fl-9', code: 'SS.912.FL.2.2', title: 'Education Investment', description: 'Explain decisions to obtain education or training involve immediate costs for future benefits', required: true },
+        { id: 'fl-10', code: 'SS.912.FL.2.3', title: 'Informed Career Decisions', description: 'Analyze ways to make informed education, job, or career decisions', required: true },
+        { id: 'fl-11', code: 'SS.912.FL.3.1', title: 'Budgeting Fundamentals', description: 'Explain that budgeting involves making rational decisions', required: true },
+        { id: 'fl-12', code: 'SS.912.FL.4.1', title: 'Banking Services', description: 'Analyze various banking services and their costs and benefits', required: true },
+        { id: 'fl-13', code: 'SS.912.FL.5.1', title: 'Credit Fundamentals', description: 'Explain that credit allows people to purchase goods and services', required: true },
+        { id: 'fl-14', code: 'SS.912.FL.6.1', title: 'Investment Principles', description: 'Explain that investors respond to incentives when deciding how to invest', required: true }
+      ],
+      lessonMappings: [
+        { lessonId: 0, standardIds: ['fl-1'], required: true, priority: 'high' },
+        { lessonId: 63, standardIds: ['fl-1'], required: true, priority: 'medium' },
+        { lessonId: 1, standardIds: ['fl-2', 'fl-7'], required: true, priority: 'high' },
+        { lessonId: 2, standardIds: ['fl-2', 'fl-3', 'fl-4', 'fl-5', 'fl-6', 'fl-7'], required: true, priority: 'high' },
+        { lessonId: 40, standardIds: ['fl-8', 'fl-9', 'fl-10'], required: true, priority: 'high' },
+        { lessonId: 44, standardIds: ['fl-8'], required: true, priority: 'medium' },
+        { lessonId: 56, standardIds: ['fl-11'], required: true, priority: 'high' },
+        { lessonId: 58, standardIds: ['fl-11'], required: true, priority: 'medium' },
+        { lessonId: 62, standardIds: ['fl-11'], required: true, priority: 'high' },
+        { lessonId: 3, standardIds: ['fl-12'], required: true, priority: 'high' },
+        { lessonId: 4, standardIds: ['fl-12'], required: true, priority: 'high' },
+        { lessonId: 5, standardIds: ['fl-12'], required: true, priority: 'high' },
+        { lessonId: 22, standardIds: ['fl-13'], required: true, priority: 'high' },
+        { lessonId: 23, standardIds: ['fl-13'], required: true, priority: 'high' },
+        { lessonId: 24, standardIds: ['fl-13'], required: true, priority: 'high' },
+        { lessonId: 11, standardIds: ['fl-14'], required: true, priority: 'high' },
+        { lessonId: 12, standardIds: ['fl-14'], required: true, priority: 'high' },
+        { lessonId: 13, standardIds: ['fl-14'], required: true, priority: 'high' }
+      ]
+    },
+    {
+      code: 'OH',
+      name: 'Ohio',
+      standards: [
+        { id: 'oh-1', code: 'FR.1', title: 'Financial Responsibility', description: 'Being accountable for managing money to satisfy current and future economic choices', required: true },
+        { id: 'oh-2', code: 'FR.2', title: 'Decision Making Strategies', description: 'Life-long decision-making strategies with consideration of alternatives and consequences', required: true },
+        { id: 'oh-3', code: 'FR.3', title: 'Earning Potential Factors', description: 'Competencies, commitment, competition, training, work ethic affecting earning potential', required: true },
+        { id: 'oh-4', code: 'FR.4', title: 'Income Sources', description: 'Job earnings, entrepreneurship, investments, government payments, etc.', required: true },
+        { id: 'oh-5', code: 'FR.5', title: 'Take Home Pay Factors', description: 'Taxes, retirement, insurance, benefits impact on take home pay', required: true },
+        { id: 'oh-6', code: 'PM.1', title: 'Spending and Savings Plan', description: 'Development of a personal budget', required: true },
+        { id: 'oh-7', code: 'PM.2', title: 'Goal Setting', description: 'Setting and prioritizing short and long-term financial goals', required: true },
+        { id: 'oh-8', code: 'PM.3', title: 'Systematic Saving', description: 'Systematic saving and investing for short and long-term goals', required: true },
+        { id: 'oh-9', code: 'RM.1', title: 'Risk Management', description: 'Managing financial risk through insurance and emergency funds', required: true },
+        { id: 'oh-10', code: 'FI.1', title: 'Financial Investing', description: 'Understanding investment principles and building wealth', required: true }
+      ],
+      lessonMappings: [
+        { lessonId: 0, standardIds: ['oh-1'], required: true, priority: 'high' },
+        { lessonId: 62, standardIds: ['oh-1', 'oh-6'], required: true, priority: 'high' },
+        { lessonId: 19, standardIds: ['oh-1', 'oh-8'], required: true, priority: 'high' },
+        { lessonId: 20, standardIds: ['oh-1', 'oh-8'], required: true, priority: 'high' },
+        { lessonId: 1, standardIds: ['oh-2'], required: true, priority: 'high' },
+        { lessonId: 2, standardIds: ['oh-2'], required: true, priority: 'high' },
+        { lessonId: 40, standardIds: ['oh-3'], required: true, priority: 'high' },
+        { lessonId: 44, standardIds: ['oh-3'], required: true, priority: 'high' },
+        { lessonId: 51, standardIds: ['oh-4', 'oh-5'], required: true, priority: 'high' },
+        { lessonId: 7, standardIds: ['oh-4'], required: true, priority: 'medium' },
+        { lessonId: 56, standardIds: ['oh-6'], required: true, priority: 'high' },
+        { lessonId: 58, standardIds: ['oh-6'], required: true, priority: 'medium' },
+        { lessonId: 59, standardIds: ['oh-6'], required: true, priority: 'medium' },
+        { lessonId: 60, standardIds: ['oh-6'], required: true, priority: 'medium' },
+        { lessonId: 61, standardIds: ['oh-6'], required: true, priority: 'medium' },
+        { lessonId: 7, standardIds: ['oh-7', 'oh-8'], required: true, priority: 'high' },
+        { lessonId: 45, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 46, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 11, standardIds: ['oh-10'], required: true, priority: 'high' },
+        { lessonId: 16, standardIds: ['oh-10'], required: true, priority: 'high' },
+        { lessonId: 18, standardIds: ['oh-10'], required: true, priority: 'high' }
+      ]
     }
   ];
 
