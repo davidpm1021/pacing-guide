@@ -16,7 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/davidpm1021/pacing-guide/issues"
   },
@@ -25,6 +25,7 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
+    "lucide-react": "^0.516.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "vite": "^6.3.5"
