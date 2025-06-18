@@ -176,43 +176,43 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
       name: 'Ohio',
       standards: [
         // FINANCIAL RESPONSIBILITY AND DECISION MAKING
-        { id: 'oh-1', code: 'FR.1', title: 'Financial Accountability', description: 'Financial responsibility entails being accountable for managing money to satisfy current and future economic choices', required: true },
-        { id: 'oh-2', code: 'FR.2', title: 'Decision Making Strategies', description: 'Financial responsibility involves life-long decision-making strategies which include consideration of alternatives and consequences', required: true },
-        { id: 'oh-3', code: 'FR.3', title: 'Earning Potential Factors', description: 'Competencies, commitment, competition, training, work ethic, abilities and attitude impact earning potential and employability', required: true },
-        { id: 'oh-4', code: 'FR.4', title: 'Income Sources', description: 'Income sources include job earnings, entrepreneurship, investments, government payments, grants, inheritances, etc.', required: true },
-        { id: 'oh-5', code: 'FR.5', title: 'Take Home Pay Impact', description: 'Taxes, retirement, insurance, employment benefits, and deductions impact take home pay', required: true },
+        { id: 'oh-1', code: 'Standard 1', title: 'Financial Accountability', description: 'Financial responsibility entails being accountable for managing money to satisfy current and future economic choices', required: true },
+        { id: 'oh-2', code: 'Standard 2', title: 'Decision Making Strategies', description: 'Financial responsibility involves life-long decision-making strategies which include consideration of alternatives and consequences', required: true },
+        { id: 'oh-3', code: 'Standard 3', title: 'Earning Potential Factors', description: 'Competencies, commitment, competition, training, work ethic, abilities and attitude impact earning potential and employability', required: true },
+        { id: 'oh-4', code: 'Standard 4', title: 'Income Sources', description: 'Income sources include job earnings, entrepreneurship, investments, government payments, grants, inheritances, etc.', required: true },
+        { id: 'oh-5', code: 'Standard 5', title: 'Take Home Pay Impact', description: 'Taxes, retirement, insurance, employment benefits, and deductions impact take home pay', required: true },
         
         // PLANNING AND MONEY MANAGEMENT
-        { id: 'oh-6', code: 'PM.1', title: 'Budgeting Plan', description: 'Financial responsibility includes the development of a spending and savings plan (personal budget)', required: true },
-        { id: 'oh-7', code: 'PM.2', title: 'Financial Institution Services', description: 'Financial institutions offer a variety of products and services to address financial responsibility', required: true },
+        { id: 'oh-6', code: 'Standard 6', title: 'Budgeting Plan', description: 'Financial responsibility includes the development of a spending and savings plan (personal budget)', required: true },
+        { id: 'oh-7', code: 'Standard 7', title: 'Financial Institution Services', description: 'Financial institutions offer a variety of products and services to address financial responsibility', required: true },
         { id: 'oh-8', code: 'Standard 8', title: 'Financial Expert Guidance', description: 'Financial experts provide guidance and advice on a wide variety of financial issues', required: true },
-        { id: 'oh-9', code: 'PM.4', title: 'Tax Planning Responsibility', description: 'Planning for and paying local, state and federal taxes is a financial responsibility', required: true },
-        { id: 'oh-10', code: 'PM.5', title: 'Tax Credits and Deductions', description: 'Tax payers may save money by understanding and using tax credits and deductions', required: true },
+        { id: 'oh-9', code: 'Standard 9', title: 'Tax Planning Responsibility', description: 'Planning for and paying local, state and federal taxes is a financial responsibility', required: true },
+        { id: 'oh-10', code: 'Standard 10', title: 'Tax Credits and Deductions', description: 'Tax payers may save money by understanding and using tax credits and deductions', required: true },
         
         // INFORMED CONSUMER
-        { id: 'oh-11', code: 'IC.1', title: 'Budget-Based Purchasing', description: 'An informed consumer makes decisions on purchases that may include a decision-making strategy to determine if purchases are within their budget', required: true },
-        { id: 'oh-12', code: 'IC.2', title: 'Consumer Protection Resources', description: 'Consumer advocates, organizations and regulations provide important information and help protect against potential consumer fraud', required: true },
-        { id: 'oh-13', code: 'IC.3', title: 'Financial Services Knowledge', description: 'Part of being an informed consumer is knowing how to utilize financial services and risk management tools, as well as comparing consumer lending terms and conditions and reading financial statements', required: true },
-        { id: 'oh-14', code: 'IC.4', title: 'Consumer Protection Laws', description: 'Consumer protections laws help safeguard individuals from fraud and potential loss', required: true },
-        { id: 'oh-15', code: 'IC.5', title: 'Direct and Indirect Costs', description: 'Planned purchasing decisions factor in direct (price) and indirect costs (e.g. sales/use tax, excise tax, shipping, handling, and delivery charges, etc.)', required: true },
+        { id: 'oh-11', code: 'Standard 11', title: 'Budget-Based Purchasing', description: 'An informed consumer makes decisions on purchases that may include a decision-making strategy to determine if purchases are within their budget', required: true },
+        { id: 'oh-12', code: 'Standard 12', title: 'Consumer Protection Resources', description: 'Consumer advocates, organizations and regulations provide important information and help protect against potential consumer fraud', required: true },
+        { id: 'oh-13', code: 'Standard 13', title: 'Financial Services Knowledge', description: 'Part of being an informed consumer is knowing how to utilize financial services and risk management tools, as well as comparing consumer lending terms and conditions and reading financial statements', required: true },
+        { id: 'oh-14', code: 'Standard 14', title: 'Consumer Protection Laws', description: 'Consumer protections laws help safeguard individuals from fraud and potential loss', required: true },
+        { id: 'oh-15', code: 'Standard 15', title: 'Direct and Indirect Costs', description: 'Planned purchasing decisions factor in direct (price) and indirect costs (e.g. sales/use tax, excise tax, shipping, handling, and delivery charges, etc.)', required: true },
         
         // INVESTING
-        { id: 'oh-16', code: 'IN.1', title: 'Investment Principles', description: 'Using key investing principles one can achieve the goal of increasing net worth', required: true },
-        { id: 'oh-17', code: 'IN.2', title: 'Investment Strategy Factors', description: 'Investment strategies must take several factors into consideration including time horizon, diversification, risk tolerance, asset allocation, costs, fees, tax implications and time value of money', required: true },
-        { id: 'oh-18', code: 'IN.3', title: 'Investment Regulation', description: 'Government agencies are charged with regulating providers of financial services to help protect investors', required: true },
+        { id: 'oh-16', code: 'Standard 16', title: 'Investment Principles', description: 'Using key investing principles one can achieve the goal of increasing net worth', required: true },
+        { id: 'oh-17', code: 'Standard 17', title: 'Investment Strategy Factors', description: 'Investment strategies must take several factors into consideration including time horizon, diversification, risk tolerance, asset allocation, costs, fees, tax implications and time value of money', required: true },
+        { id: 'oh-18', code: 'Standard 18', title: 'Investment Regulation', description: 'Government agencies are charged with regulating providers of financial services to help protect investors', required: true },
         
         // CREDIT AND DEBT
-        { id: 'oh-19', code: 'CD.1', title: 'Credit Fundamentals', description: 'Credit is a contractual agreement in which a borrower receives something of value now and agrees to repay to the lender at some later date', required: true },
-        { id: 'oh-20', code: 'CD.2', title: 'Debt Definition', description: 'Debt is an obligation owed by one party to a second party', required: true },
-        { id: 'oh-21', code: 'CD.3', title: 'Credit and Debt Balance', description: 'Effectively balancing credit and debt helps one achieve some short and long-term goals', required: true },
-        { id: 'oh-22', code: 'CD.4', title: 'Financial Documents', description: 'Financial documents and contractual obligations inform the consumer and define the terms and conditions of establishing credit and incurring debt', required: true },
-        { id: 'oh-23', code: 'CD.5', title: 'Post-Secondary Education Payment', description: 'Many options exist for paying for post-secondary education opportunities', required: true },
+        { id: 'oh-19', code: 'Standard 19', title: 'Credit Fundamentals', description: 'Credit is a contractual agreement in which a borrower receives something of value now and agrees to repay to the lender at some later date', required: true },
+        { id: 'oh-20', code: 'Standard 20', title: 'Debt Definition', description: 'Debt is an obligation owed by one party to a second party', required: true },
+        { id: 'oh-21', code: 'Standard 21', title: 'Credit and Debt Balance', description: 'Effectively balancing credit and debt helps one achieve some short and long-term goals', required: true },
+        { id: 'oh-22', code: 'Standard 22', title: 'Financial Documents', description: 'Financial documents and contractual obligations inform the consumer and define the terms and conditions of establishing credit and incurring debt', required: true },
+        { id: 'oh-23', code: 'Standard 23', title: 'Post-Secondary Education Payment', description: 'Many options exist for paying for post-secondary education opportunities', required: true },
         
         // RISK MANAGEMENT AND INSURANCE
-        { id: 'oh-24', code: 'RM.1', title: 'Risk Management Planning', description: 'A risk management plan can protect consumers from the potential loss of personal and/or business assets or income', required: true },
-        { id: 'oh-25', code: 'RM.2', title: 'Identity Protection', description: 'Safeguards exist that help protect ones identity', required: true },
-        { id: 'oh-26', code: 'RM.3', title: 'Asset Diversification', description: 'Diversification of assets is one way to manage risk', required: true },
-        { id: 'oh-27', code: 'RM.4', title: 'Comprehensive Insurance', description: 'A comprehensive insurance plan (health, life, disability, auto, homeowners, renters, liability, etc.) serves as a safeguard against potential loss', required: true }
+        { id: 'oh-24', code: 'Standard 24', title: 'Risk Management Planning', description: 'A risk management plan can protect consumers from the potential loss of personal and/or business assets or income', required: true },
+        { id: 'oh-25', code: 'Standard 25', title: 'Identity Protection', description: 'Safeguards exist that help protect ones identity', required: true },
+        { id: 'oh-26', code: 'Standard 26', title: 'Asset Diversification', description: 'Diversification of assets is one way to manage risk', required: true },
+        { id: 'oh-27', code: 'Standard 27', title: 'Comprehensive Insurance', description: 'A comprehensive insurance plan (health, life, disability, auto, homeowners, renters, liability, etc.) serves as a safeguard against potential loss', required: true }
       ],
       lessonMappings: [
         // Financial Responsibility
