@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/davidpm1021/pacing-guide/issues"
   },
-  "homepage": "https://github.com/davidpm1021/pacing-guide#readme",
+  "homepage": "https://davidpm1021.github.io/pacing-guide",
   "dependencies": {
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
