@@ -620,14 +620,16 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     
     return {
       totalLessons: enabledLessons.length,
-      totalPeriods: Math.min(totalPeriods, availableDays),
+      totalPeriods: totalPeriods,
       averageEfficiency: Math.round(totalEfficiency),
       combinationsCreated: newCombinedLessons.length,
-      dayUtilization: Math.round((Math.min(totalPeriods, availableDays) / availableDays) * 100),
+      dayUtilization: Math.round((totalPeriods / availableDays) * 100),
       requiredLessons: requiredLessons.length,
       optionalLessonsSelected: optionalLessons.length,
       optionalActivitiesIncluded: optionalWithActivities.length,
-      optionalActivitiesRemoved: optionalLessons.length - optionalWithActivities.length
+      optionalActivitiesRemoved: optionalLessons.length - optionalWithActivities.length,
+      availableDays: availableDays,
+      periodsOver: Math.max(0, totalPeriods - availableDays)
     };
   };
 
@@ -856,11 +858,13 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                   <div className="text-sm text-emerald-600 dark:text-emerald-400">Lessons Selected</div>
                 </div>
                 
-                <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                <div className={`text-center p-3 rounded-lg ${optimizationResults.periodsOver > 0 ? 'bg-red-50 dark:bg-red-900/30' : 'bg-blue-50 dark:bg-blue-900/30'}`}>
+                  <div className={`text-2xl font-bold ${optimizationResults.periodsOver > 0 ? 'text-red-700 dark:text-red-300' : 'text-blue-700 dark:text-blue-300'}`}>
                     {optimizationResults.totalPeriods}
                   </div>
-                  <div className="text-sm text-blue-600 dark:text-blue-400">Class Periods</div>
+                  <div className={`text-sm ${optimizationResults.periodsOver > 0 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}>
+                    Class Periods {optimizationResults.periodsOver > 0 ? `(${optimizationResults.periodsOver} over)` : ''}
+                  </div>
                 </div>
                 
                 <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
@@ -870,11 +874,13 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                   <div className="text-sm text-purple-600 dark:text-purple-400">Avg Efficiency</div>
                 </div>
                 
-                <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/30 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                <div className={`text-center p-3 rounded-lg ${optimizationResults.dayUtilization > 100 ? 'bg-red-50 dark:bg-red-900/30' : 'bg-orange-50 dark:bg-orange-900/30'}`}>
+                  <div className={`text-2xl font-bold ${optimizationResults.dayUtilization > 100 ? 'text-red-700 dark:text-red-300' : 'text-orange-700 dark:text-orange-300'}`}>
                     {optimizationResults.dayUtilization}%
                   </div>
-                  <div className="text-sm text-orange-600 dark:text-orange-400">Day Utilization</div>
+                  <div className={`text-sm ${optimizationResults.dayUtilization > 100 ? 'text-red-600 dark:text-red-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    Day Utilization
+                  </div>
                 </div>
               </div>
               
@@ -897,7 +903,16 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                 </div>
               </div>
               
-              {optimizationResults.optionalActivitiesRemoved > 0 && (
+              {optimizationResults.periodsOver > 0 && (
+                <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-700">
+                  <p className="text-sm text-red-800 dark:text-red-200 flex items-center gap-2">
+                    <AlertTriangle size={16} />
+                    <strong>CRITICAL:</strong> Even with maximum optimization, you need {optimizationResults.periodsOver} more teaching days than available ({optimizationResults.totalPeriods} needed vs {optimizationResults.availableDays} available). Consider removing some optional lessons or shortening activities.
+                  </p>
+                </div>
+              )}
+              
+              {optimizationResults.optionalActivitiesRemoved > 0 && optimizationResults.periodsOver === 0 && (
                 <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
                   <p className="text-sm text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
                     <AlertTriangle size={16} />
