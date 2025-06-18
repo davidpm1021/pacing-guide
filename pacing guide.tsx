@@ -150,6 +150,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
   const [globalOptionalActivities, setGlobalOptionalActivities] = useState(true);
   const [combinedLessons, setCombinedLessons] = useState<CombinedLesson[]>([]);
   const [results, setResults] = useState<Results | null>(null);
+  const [optimizationResults, setOptimizationResults] = useState<any>(null);
 
   // New auto-selection criteria state
   const [autoSelectionCriteria, setAutoSelectionCriteria] = useState({
@@ -593,6 +594,226 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     setCombinedLessons([]);
   };
 
+  // Intelligent Optimization Engine
+  const optimizePacingGuide = () => {
+    const timeConstraints = calculateAvailableTime();
+    const effectiveClassTime = timeConstraints.effectiveMinutesPerClass;
+    const availableDays = timeConstraints.availableTeachingDays;
+
+    // Step 1: Start with all required lessons
+    const requiredLessons = allLessons.filter(lesson => lesson.required === "Yes");
+    const optionalLessons = allLessons.filter(lesson => lesson.required === "No");
+    
+    // Step 2: Create lesson objects with timing info
+    const createLessonInfo = (lesson: Lesson, includeActivities: boolean) => ({
+      ...lesson,
+      timeWithActivities: lesson.totalTime,
+      timeWithoutActivities: lesson.nonActivityTime,
+      currentTime: includeActivities ? lesson.totalTime : lesson.nonActivityTime,
+      includeActivities,
+      efficiency: Math.round((includeActivities ? lesson.totalTime : lesson.nonActivityTime) / effectiveClassTime * 100),
+      periodsNeeded: Math.ceil((includeActivities ? lesson.totalTime : lesson.nonActivityTime) / effectiveClassTime)
+    });
+
+    // Step 3: Bin-packing algorithm for optimal combinations
+    const findOptimalCombinations = (lessons: any[]) => {
+      const combinations: any[] = [];
+      const used = new Set();
+      
+      // Sort lessons by efficiency (descending)
+      const sortedLessons = [...lessons].sort((a, b) => b.efficiency - a.efficiency);
+      
+      for (let i = 0; i < sortedLessons.length; i++) {
+        if (used.has(sortedLessons[i].id)) continue;
+        
+        const lesson1 = sortedLessons[i];
+        if (lesson1.currentTime >= effectiveClassTime * 0.8) {
+          // Lesson is already efficient enough on its own
+          combinations.push({
+            type: 'single',
+            lessons: [lesson1],
+            totalTime: lesson1.currentTime,
+            efficiency: lesson1.efficiency,
+            periods: 1
+          });
+          used.add(lesson1.id);
+          continue;
+        }
+        
+        // Try to find a good combination partner
+        let bestPartner = null;
+        let bestCombinedEfficiency = 0;
+        
+        for (let j = i + 1; j < sortedLessons.length; j++) {
+          if (used.has(sortedLessons[j].id)) continue;
+          
+          const lesson2 = sortedLessons[j];
+          const combinedTime = lesson1.currentTime + lesson2.currentTime;
+          
+          if (combinedTime <= effectiveClassTime && 
+              combinedTime >= effectiveClassTime * 0.75) {
+            const combinedEfficiency = Math.round((combinedTime / effectiveClassTime) * 100);
+            
+            // Prefer combinations within the same unit
+            const sameUnit = lesson1.unit === lesson2.unit;
+            const adjustedEfficiency = sameUnit ? combinedEfficiency + 10 : combinedEfficiency;
+            
+            if (adjustedEfficiency > bestCombinedEfficiency) {
+              bestPartner = lesson2;
+              bestCombinedEfficiency = adjustedEfficiency;
+            }
+          }
+        }
+        
+        if (bestPartner) {
+          combinations.push({
+            type: 'combined',
+            lessons: [lesson1, bestPartner],
+            totalTime: lesson1.currentTime + bestPartner.currentTime,
+            efficiency: bestCombinedEfficiency,
+            periods: 1
+          });
+          used.add(lesson1.id);
+          used.add(bestPartner.id);
+        } else {
+          combinations.push({
+            type: 'single',
+            lessons: [lesson1],
+            totalTime: lesson1.currentTime,
+            efficiency: lesson1.efficiency,
+            periods: lesson1.periodsNeeded
+          });
+          used.add(lesson1.id);
+        }
+      }
+      
+      return combinations;
+    };
+
+    // Step 4: Optimize required lessons first
+    const requiredLessonInfos = requiredLessons.map(lesson => 
+      createLessonInfo(lesson, true) // Always include activities for required lessons
+    );
+    
+    const requiredCombinations = findOptimalCombinations(requiredLessonInfos);
+    const requiredPeriods = requiredCombinations.reduce((sum, combo) => sum + combo.periods, 0);
+    
+    // Step 5: Fill remaining time with optimal optional lessons
+    const remainingPeriods = availableDays - requiredPeriods;
+    const optionalLessonInfos: any[] = [];
+    
+    // For optional lessons, try both with and without activities, pick the most efficient
+    optionalLessons.forEach(lesson => {
+      const withActivities = createLessonInfo(lesson, true);
+      const withoutActivities = createLessonInfo(lesson, false);
+      
+      // Prefer the version that fits better in class periods
+      if (withoutActivities.efficiency >= 75 && withoutActivities.efficiency > withActivities.efficiency) {
+        optionalLessonInfos.push(withoutActivities);
+      } else {
+        optionalLessonInfos.push(withActivities);
+      }
+    });
+    
+    // Sort optional lessons by efficiency and educational value
+    const scoredOptionalLessons = optionalLessonInfos.map(lesson => ({
+      ...lesson,
+      score: lesson.efficiency + (lesson.timeWithActivities > 40 ? 10 : 0) // Bonus for substantial lessons
+    })).sort((a, b) => b.score - a.score);
+    
+    // Select best optional lessons that fit in remaining periods
+    const selectedOptionalLessons: any[] = [];
+    let periodsUsed = 0;
+    
+    for (const lesson of scoredOptionalLessons) {
+      if (periodsUsed + lesson.periodsNeeded <= remainingPeriods) {
+        selectedOptionalLessons.push(lesson);
+        periodsUsed += lesson.periodsNeeded;
+      }
+    }
+    
+    const optionalCombinations = findOptimalCombinations(selectedOptionalLessons);
+    
+    // Step 6: Apply optimized settings
+    const newLessonSettings = { ...lessonSettings };
+    const newCombinedLessons: CombinedLesson[] = [];
+    
+    // Reset all lessons to disabled first
+    allLessons.forEach(lesson => {
+      newLessonSettings[lesson.id] = {
+        ...newLessonSettings[lesson.id],
+        lessonEnabled: false,
+        includeActivities: true,
+        combinedWith: null
+      };
+    });
+    
+    // Apply required lesson settings
+    requiredCombinations.forEach(combo => {
+      combo.lessons.forEach((lesson: any, index: number) => {
+        newLessonSettings[lesson.id] = {
+          ...newLessonSettings[lesson.id],
+          lessonEnabled: true,
+          includeActivities: lesson.includeActivities,
+          combinedWith: combo.type === 'combined' && index === 0 ? combo.lessons[1].id : 
+                        combo.type === 'combined' && index === 1 ? combo.lessons[0].id : null
+        };
+      });
+      
+      if (combo.type === 'combined') {
+        newCombinedLessons.push({
+          id: `${combo.lessons[0].id}-${combo.lessons[1].id}`,
+          lesson1: combo.lessons[0].id,
+          lesson2: combo.lessons[1].id,
+          totalTime: combo.totalTime,
+          efficiency: combo.efficiency
+        });
+      }
+    });
+    
+    // Apply optional lesson settings
+    optionalCombinations.forEach(combo => {
+      combo.lessons.forEach((lesson: any, index: number) => {
+        newLessonSettings[lesson.id] = {
+          ...newLessonSettings[lesson.id],
+          lessonEnabled: true,
+          includeActivities: lesson.includeActivities,
+          combinedWith: combo.type === 'combined' && index === 0 ? combo.lessons[1].id : 
+                        combo.type === 'combined' && index === 1 ? combo.lessons[0].id : null
+        };
+      });
+      
+      if (combo.type === 'combined') {
+        newCombinedLessons.push({
+          id: `${combo.lessons[0].id}-${combo.lessons[1].id}`,
+          lesson1: combo.lessons[0].id,
+          lesson2: combo.lessons[1].id,
+          totalTime: combo.totalTime,
+          efficiency: combo.efficiency
+        });
+      }
+    });
+    
+    setLessonSettings(newLessonSettings);
+    setCombinedLessons(newCombinedLessons);
+    
+    // Return optimization results for display
+    const totalCombinations = [...requiredCombinations, ...optionalCombinations];
+    const totalEfficiency = totalCombinations.reduce((sum, combo) => sum + combo.efficiency, 0) / totalCombinations.length;
+    const totalLessons = totalCombinations.reduce((sum, combo) => sum + combo.lessons.length, 0);
+    const totalPeriods = totalCombinations.reduce((sum, combo) => sum + combo.periods, 0);
+    
+    return {
+      totalLessons,
+      totalPeriods,
+      averageEfficiency: Math.round(totalEfficiency),
+      combinationsCreated: newCombinedLessons.length,
+      dayUtilization: Math.round((totalPeriods / availableDays) * 100),
+      requiredLessons: requiredLessons.length,
+      optionalLessonsSelected: selectedOptionalLessons.length
+    };
+  };
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header Section */}
@@ -863,6 +1084,145 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                 >
                   Reset to Default
                 </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Smart Optimization Engine */}
+      <div className="mb-8 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-lg shadow-sm border border-emerald-200 dark:border-emerald-700 hover:shadow-md transition-shadow duration-200 p-8">
+        <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-emerald-800 dark:text-emerald-200">
+          <Settings className="text-emerald-600 dark:text-emerald-400" size={24} />
+          🚀 Smart Optimization Engine
+        </h2>
+        
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-emerald-100 dark:border-emerald-800">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Intelligent Pacing Optimization</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Our advanced algorithm will automatically create the most efficient pacing guide by:
+            </p>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-300 mb-6">
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Including all required lessons with activities
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Combining lessons for maximum efficiency
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Optimizing optional activities for time savings
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Maximizing classroom time utilization
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Prioritizing same-unit lesson combinations
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={16} />
+                Filling available days to capacity
+              </li>
+            </ul>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  const optimResults = optimizePacingGuide();
+                  setOptimizationResults(optimResults);
+                }}
+                className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-medium py-3 px-6 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 flex items-center gap-2 shadow-lg"
+              >
+                <Settings size={20} />
+                🎯 Optimize My Pacing Guide
+              </button>
+              
+              <button
+                onClick={resetToDefault}
+                className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium py-3 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+              >
+                Reset All
+              </button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-emerald-100 dark:border-emerald-800">
+              <h4 className="font-medium text-emerald-700 dark:text-emerald-300 mb-2">Bin-Packing Algorithm</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Intelligently combines lessons to minimize wasted time and maximize class period efficiency.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-emerald-100 dark:border-emerald-800">
+              <h4 className="font-medium text-emerald-700 dark:text-emerald-300 mb-2">Efficiency Scoring</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Evaluates each lesson combination based on time utilization, educational value, and unit coherence.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-emerald-100 dark:border-emerald-800">
+              <h4 className="font-medium text-emerald-700 dark:text-emerald-300 mb-2">Smart Selection</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Automatically chooses whether to include optional activities based on optimal time usage.
+              </p>
+            </div>
+          </div>
+          
+          {/* Optimization Results Display */}
+          {optimizationResults && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-emerald-100 dark:border-emerald-800">
+              <h3 className="text-lg font-semibold text-emerald-700 dark:text-emerald-300 mb-4 flex items-center gap-2">
+                <CheckCircle className="text-emerald-500" size={20} />
+                Optimization Complete! 🎉
+              </h3>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">
+                  <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
+                    {optimizationResults.totalLessons}
+                  </div>
+                  <div className="text-sm text-emerald-600 dark:text-emerald-400">Lessons Selected</div>
+                </div>
+                
+                <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                    {optimizationResults.totalPeriods}
+                  </div>
+                  <div className="text-sm text-blue-600 dark:text-blue-400">Class Periods</div>
+                </div>
+                
+                <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                    {optimizationResults.averageEfficiency}%
+                  </div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400">Avg Efficiency</div>
+                </div>
+                
+                <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/30 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                    {optimizationResults.dayUtilization}%
+                  </div>
+                  <div className="text-sm text-orange-600 dark:text-orange-400">Day Utilization</div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                  <span className="text-gray-600 dark:text-gray-300">Required Lessons:</span>
+                  <span className="font-medium text-gray-800 dark:text-white">{optimizationResults.requiredLessons}</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                  <span className="text-gray-600 dark:text-gray-300">Optional Lessons:</span>
+                  <span className="font-medium text-gray-800 dark:text-white">{optimizationResults.optionalLessonsSelected}</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                  <span className="text-gray-600 dark:text-gray-300">Combinations:</span>
+                  <span className="font-medium text-gray-800 dark:text-white">{optimizationResults.combinationsCreated}</span>
+                </div>
               </div>
             </div>
           )}
