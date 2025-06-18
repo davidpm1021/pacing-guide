@@ -554,69 +554,26 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     let currentCombinations = createOptimalCombinations(allLessons);
     usedPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
 
-    // Step 4: Add optional lessons in priority order until we reach the day limit
-    const optionalLessons = allLessons.filter(lesson => lesson.required === "No");
-    
-    // Score optional lessons by educational value and efficiency
-    const scoredOptionalLessons = optionalLessons.map(lesson => {
-      const withActivities = Math.ceil(lesson.totalTime / effectiveClassTime);
-      const withoutActivities = Math.ceil(lesson.nonActivityTime / effectiveClassTime);
-      const efficiency = Math.round((lesson.totalTime / effectiveClassTime / withActivities) * 100);
-      
-      return {
-        lesson,
-        withActivitiesPeriods: withActivities,
-        withoutActivitiesPeriods: withoutActivities,
-        efficiency,
-        // Score: longer lessons (more content) + efficiency bonus
-        score: lesson.totalTime + (efficiency >= 75 ? 50 : 0) + (lesson.totalTime > 60 ? 25 : 0)
-      };
-    }).sort((a, b) => b.score - a.score); // Highest score first
-
-    // Add optional lessons one by one until we hit the day limit
-    for (const scoredLesson of scoredOptionalLessons) {
-      const lesson = scoredLesson.lesson;
-      
-      // Try with activities first
+    // Step 4: Start with ALL lessons enabled, then reduce intelligently
+    // Enable all lessons first
+    allLessons.forEach(lesson => {
       newLessonSettings[lesson.id].lessonEnabled = true;
       newLessonSettings[lesson.id].includeActivities = true;
-      
-      currentCombinations = createOptimalCombinations(allLessons);
-      const periodsWithActivities = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-      
-      if (periodsWithActivities <= availableDays) {
-        // Fits with activities - keep it
-        continue;
-      }
-      
-      // Try without activities
-      newLessonSettings[lesson.id].includeActivities = false;
-      currentCombinations = createOptimalCombinations(allLessons);
-      const periodsWithoutActivities = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-      
-      if (periodsWithoutActivities <= availableDays) {
-        // Fits without activities - keep it
-        continue;
-      }
-      
-      // Doesn't fit either way - disable this lesson
-      newLessonSettings[lesson.id].lessonEnabled = false;
-    }
+    });
 
-    // Final reduction phase: if still over limit, remove optional activities aggressively
+    // Calculate initial periods needed
     currentCombinations = createOptimalCombinations(allLessons);
     let currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-    
+
+    // Phase 1: Remove optional activities to reduce periods
     if (currentPeriods > availableDays) {
-      // Get all enabled optional lessons with activities
-      const enabledOptionalWithActivities = allLessons.filter(lesson => 
-        lesson.required === "No" && 
-        newLessonSettings[lesson.id].lessonEnabled && 
-        newLessonSettings[lesson.id].includeActivities
+      // Get all optional lessons with activities
+      const optionalWithActivities = allLessons.filter(lesson => 
+        lesson.required === "No" && newLessonSettings[lesson.id].includeActivities
       );
       
-      // Sort by how many periods we save by removing activities
-      const activityRemovalSavings = enabledOptionalWithActivities.map(lesson => {
+      // Calculate savings for each activity removal
+      const activitySavings = optionalWithActivities.map(lesson => {
         const withActivities = Math.ceil(lesson.totalTime / effectiveClassTime);
         const withoutActivities = Math.ceil(lesson.nonActivityTime / effectiveClassTime);
         const periodsSaved = withActivities - withoutActivities;
@@ -624,43 +581,52 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
         return {
           lesson,
           periodsSaved,
-          newEfficiency: Math.round((lesson.nonActivityTime / effectiveClassTime / withoutActivities) * 100)
+          efficiency: withoutActivities > 0 ? Math.round((lesson.nonActivityTime / effectiveClassTime / withoutActivities) * 100) : 0
         };
       }).filter(item => item.periodsSaved > 0)
         .sort((a, b) => {
-          // Prioritize removing activities that save the most periods
+          // Prioritize activities that save the most periods
           if (a.periodsSaved !== b.periodsSaved) {
             return b.periodsSaved - a.periodsSaved;
           }
-          // Then by efficiency after removing activities
-          return b.newEfficiency - a.newEfficiency;
+          return b.efficiency - a.efficiency;
         });
-      
-      // Remove activities one by one until we fit
-      for (const item of activityRemovalSavings) {
+
+      // Remove activities until we're under the limit
+      for (const item of activitySavings) {
         if (currentPeriods <= availableDays) break;
         
+        // Remove activities from this lesson
         newLessonSettings[item.lesson.id].includeActivities = false;
+        
+        // Recalculate with new combinations
         currentCombinations = createOptimalCombinations(allLessons);
         currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
       }
+    }
+
+    // Phase 2: If still over limit, remove optional lessons
+    if (currentPeriods > availableDays) {
+      const optionalLessons = allLessons.filter(lesson => 
+        lesson.required === "No" && newLessonSettings[lesson.id].lessonEnabled
+      );
       
-      // If still over after removing all optional activities, start disabling optional lessons
-      if (currentPeriods > availableDays) {
-        const enabledOptionalLessons = allLessons.filter(lesson => 
-          lesson.required === "No" && newLessonSettings[lesson.id].lessonEnabled
-        );
+      // Sort by value (remove shorter lessons first to preserve content)
+      const lessonsByValue = optionalLessons.sort((a, b) => {
+        const timeA = newLessonSettings[a.id].includeActivities ? a.totalTime : a.nonActivityTime;
+        const timeB = newLessonSettings[b.id].includeActivities ? b.totalTime : b.nonActivityTime;
+        return timeA - timeB; // Remove shorter lessons first
+      });
+      
+      for (const lesson of lessonsByValue) {
+        if (currentPeriods <= availableDays) break;
         
-        // Sort by total time (remove shorter lessons first to preserve more valuable content)
-        const lessonsByValue = enabledOptionalLessons.sort((a, b) => a.totalTime - b.totalTime);
+        // Disable this lesson
+        newLessonSettings[lesson.id].lessonEnabled = false;
         
-        for (const lesson of lessonsByValue) {
-          if (currentPeriods <= availableDays) break;
-          
-          newLessonSettings[lesson.id].lessonEnabled = false;
-          currentCombinations = createOptimalCombinations(allLessons);
-          currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
-        }
+        // Recalculate
+        currentCombinations = createOptimalCombinations(allLessons);
+        currentPeriods = currentCombinations.reduce((sum, combo) => sum + combo.periods, 0);
       }
     }
 
