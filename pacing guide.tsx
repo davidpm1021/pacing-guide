@@ -1447,6 +1447,9 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
           })()}
         </div>
       )}
+      </div>
+      </div>
+      </div>
 
       <div className="space-y-8">
         {Object.entries(lessonsByUnit).map(([unitName, lessons]) => {
