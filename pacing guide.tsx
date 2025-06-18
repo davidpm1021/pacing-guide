@@ -175,39 +175,116 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
       code: 'OH',
       name: 'Ohio',
       standards: [
-        { id: 'oh-1', code: 'FR.1', title: 'Financial Responsibility', description: 'Being accountable for managing money to satisfy current and future economic choices', required: true },
-        { id: 'oh-2', code: 'FR.2', title: 'Decision Making Strategies', description: 'Life-long decision-making strategies with consideration of alternatives and consequences', required: true },
-        { id: 'oh-3', code: 'FR.3', title: 'Earning Potential Factors', description: 'Competencies, commitment, competition, training, work ethic affecting earning potential', required: true },
-        { id: 'oh-4', code: 'FR.4', title: 'Income Sources', description: 'Job earnings, entrepreneurship, investments, government payments, etc.', required: true },
-        { id: 'oh-5', code: 'FR.5', title: 'Take Home Pay Factors', description: 'Taxes, retirement, insurance, benefits impact on take home pay', required: true },
-        { id: 'oh-6', code: 'PM.1', title: 'Spending and Savings Plan', description: 'Development of a personal budget', required: true },
-        { id: 'oh-7', code: 'PM.2', title: 'Goal Setting', description: 'Setting and prioritizing short and long-term financial goals', required: true },
-        { id: 'oh-8', code: 'PM.3', title: 'Systematic Saving', description: 'Systematic saving and investing for short and long-term goals', required: true },
-        { id: 'oh-9', code: 'RM.1', title: 'Risk Management', description: 'Managing financial risk through insurance and emergency funds', required: true },
-        { id: 'oh-10', code: 'FI.1', title: 'Financial Investing', description: 'Understanding investment principles and building wealth', required: true }
+        // FINANCIAL RESPONSIBILITY AND DECISION MAKING
+        { id: 'oh-1', code: 'FR.1', title: 'Financial Accountability', description: 'Financial responsibility entails being accountable for managing money to satisfy current and future economic choices', required: true },
+        { id: 'oh-2', code: 'FR.2', title: 'Decision Making Strategies', description: 'Financial responsibility involves life-long decision-making strategies which include consideration of alternatives and consequences', required: true },
+        { id: 'oh-3', code: 'FR.3', title: 'Earning Potential Factors', description: 'Competencies, commitment, competition, training, work ethic, abilities and attitude impact earning potential and employability', required: true },
+        { id: 'oh-4', code: 'FR.4', title: 'Income Sources', description: 'Income sources include job earnings, entrepreneurship, investments, government payments, grants, inheritances, etc.', required: true },
+        { id: 'oh-5', code: 'FR.5', title: 'Take Home Pay Impact', description: 'Taxes, retirement, insurance, employment benefits, and deductions impact take home pay', required: true },
+        
+        // PLANNING AND MONEY MANAGEMENT
+        { id: 'oh-6', code: 'PM.1', title: 'Budgeting Plan', description: 'Financial responsibility includes the development of a spending and savings plan (personal budget)', required: true },
+        { id: 'oh-7', code: 'PM.2', title: 'Financial Institution Services', description: 'Financial institutions offer a variety of products and services to address financial responsibility', required: true },
+        { id: 'oh-8', code: 'PM.3', title: 'Financial Expert Guidance', description: 'Financial experts provide guidance and advice on a wide variety of financial issues', required: true },
+        { id: 'oh-9', code: 'PM.4', title: 'Tax Planning Responsibility', description: 'Planning for and paying local, state and federal taxes is a financial responsibility', required: true },
+        { id: 'oh-10', code: 'PM.5', title: 'Tax Credits and Deductions', description: 'Tax payers may save money by understanding and using tax credits and deductions', required: true },
+        
+        // INFORMED CONSUMER
+        { id: 'oh-11', code: 'IC.1', title: 'Budget-Based Purchasing', description: 'An informed consumer makes decisions on purchases that may include a decision-making strategy to determine if purchases are within their budget', required: true },
+        { id: 'oh-12', code: 'IC.2', title: 'Consumer Protection Resources', description: 'Consumer advocates, organizations and regulations provide important information and help protect against potential consumer fraud', required: true },
+        { id: 'oh-13', code: 'IC.3', title: 'Financial Services Knowledge', description: 'Part of being an informed consumer is knowing how to utilize financial services and risk management tools, as well as comparing consumer lending terms and conditions and reading financial statements', required: true },
+        { id: 'oh-14', code: 'IC.4', title: 'Consumer Protection Laws', description: 'Consumer protections laws help safeguard individuals from fraud and potential loss', required: true },
+        { id: 'oh-15', code: 'IC.5', title: 'Direct and Indirect Costs', description: 'Planned purchasing decisions factor in direct (price) and indirect costs (e.g. sales/use tax, excise tax, shipping, handling, and delivery charges, etc.)', required: true },
+        
+        // INVESTING
+        { id: 'oh-16', code: 'IN.1', title: 'Investment Principles', description: 'Using key investing principles one can achieve the goal of increasing net worth', required: true },
+        { id: 'oh-17', code: 'IN.2', title: 'Investment Strategy Factors', description: 'Investment strategies must take several factors into consideration including time horizon, diversification, risk tolerance, asset allocation, costs, fees, tax implications and time value of money', required: true },
+        { id: 'oh-18', code: 'IN.3', title: 'Investment Regulation', description: 'Government agencies are charged with regulating providers of financial services to help protect investors', required: true },
+        
+        // CREDIT AND DEBT
+        { id: 'oh-19', code: 'CD.1', title: 'Credit Fundamentals', description: 'Credit is a contractual agreement in which a borrower receives something of value now and agrees to repay to the lender at some later date', required: true },
+        { id: 'oh-20', code: 'CD.2', title: 'Debt Definition', description: 'Debt is an obligation owed by one party to a second party', required: true },
+        { id: 'oh-21', code: 'CD.3', title: 'Credit and Debt Balance', description: 'Effectively balancing credit and debt helps one achieve some short and long-term goals', required: true },
+        { id: 'oh-22', code: 'CD.4', title: 'Financial Documents', description: 'Financial documents and contractual obligations inform the consumer and define the terms and conditions of establishing credit and incurring debt', required: true },
+        { id: 'oh-23', code: 'CD.5', title: 'Post-Secondary Education Payment', description: 'Many options exist for paying for post-secondary education opportunities', required: true },
+        
+        // RISK MANAGEMENT AND INSURANCE
+        { id: 'oh-24', code: 'RM.1', title: 'Risk Management Planning', description: 'A risk management plan can protect consumers from the potential loss of personal and/or business assets or income', required: true },
+        { id: 'oh-25', code: 'RM.2', title: 'Identity Protection', description: 'Safeguards exist that help protect one\'s identity', required: true },
+        { id: 'oh-26', code: 'RM.3', title: 'Asset Diversification', description: 'Diversification of assets is one way to manage risk', required: true },
+        { id: 'oh-27', code: 'RM.4', title: 'Comprehensive Insurance', description: 'A comprehensive insurance plan (health, life, disability, auto, homeowners, renters, liability, etc.) serves as a safeguard against potential loss', required: true }
       ],
       lessonMappings: [
+        // Financial Responsibility
         { lessonId: 0, standardIds: ['oh-1'], required: true, priority: 'high' },
         { lessonId: 62, standardIds: ['oh-1', 'oh-6'], required: true, priority: 'high' },
-        { lessonId: 19, standardIds: ['oh-1', 'oh-8'], required: true, priority: 'high' },
-        { lessonId: 20, standardIds: ['oh-1', 'oh-8'], required: true, priority: 'high' },
+        { lessonId: 19, standardIds: ['oh-1'], required: true, priority: 'high' },
+        { lessonId: 20, standardIds: ['oh-1'], required: true, priority: 'high' },
         { lessonId: 1, standardIds: ['oh-2'], required: true, priority: 'high' },
         { lessonId: 2, standardIds: ['oh-2'], required: true, priority: 'high' },
         { lessonId: 40, standardIds: ['oh-3'], required: true, priority: 'high' },
         { lessonId: 44, standardIds: ['oh-3'], required: true, priority: 'high' },
         { lessonId: 51, standardIds: ['oh-4', 'oh-5'], required: true, priority: 'high' },
         { lessonId: 7, standardIds: ['oh-4'], required: true, priority: 'medium' },
+        
+        // Planning and Money Management  
         { lessonId: 56, standardIds: ['oh-6'], required: true, priority: 'high' },
         { lessonId: 58, standardIds: ['oh-6'], required: true, priority: 'medium' },
         { lessonId: 59, standardIds: ['oh-6'], required: true, priority: 'medium' },
         { lessonId: 60, standardIds: ['oh-6'], required: true, priority: 'medium' },
         { lessonId: 61, standardIds: ['oh-6'], required: true, priority: 'medium' },
-        { lessonId: 7, standardIds: ['oh-7', 'oh-8'], required: true, priority: 'high' },
-        { lessonId: 45, standardIds: ['oh-9'], required: true, priority: 'high' },
-        { lessonId: 46, standardIds: ['oh-9'], required: true, priority: 'high' },
-        { lessonId: 11, standardIds: ['oh-10'], required: true, priority: 'high' },
-        { lessonId: 16, standardIds: ['oh-10'], required: true, priority: 'high' },
-        { lessonId: 18, standardIds: ['oh-10'], required: true, priority: 'high' }
+        { lessonId: 3, standardIds: ['oh-7'], required: true, priority: 'high' },
+        { lessonId: 4, standardIds: ['oh-7'], required: true, priority: 'high' },
+        { lessonId: 6, standardIds: ['oh-7'], required: true, priority: 'medium' },
+        { lessonId: 10, standardIds: ['oh-7'], required: true, priority: 'medium' },
+        { lessonId: 51, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 52, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 53, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 54, standardIds: ['oh-9'], required: true, priority: 'high' },
+        { lessonId: 55, standardIds: ['oh-9'], required: true, priority: 'medium' },
+        
+        // Informed Consumer
+        { lessonId: 65, standardIds: ['oh-11'], required: true, priority: 'medium' },
+        { lessonId: 66, standardIds: ['oh-12', 'oh-25'], required: true, priority: 'medium' },
+        { lessonId: 67, standardIds: ['oh-12', 'oh-25'], required: true, priority: 'high' },
+        { lessonId: 28, standardIds: ['oh-13'], required: true, priority: 'medium' },
+        { lessonId: 21, standardIds: ['oh-13'], required: true, priority: 'medium' },
+        
+        // Investing
+        { lessonId: 11, standardIds: ['oh-16'], required: true, priority: 'high' },
+        { lessonId: 18, standardIds: ['oh-16'], required: true, priority: 'medium' },
+        { lessonId: 13, standardIds: ['oh-17'], required: true, priority: 'high' },
+        { lessonId: 14, standardIds: ['oh-17'], required: true, priority: 'medium' },
+        { lessonId: 15, standardIds: ['oh-17'], required: true, priority: 'high' },
+        { lessonId: 16, standardIds: ['oh-17'], required: true, priority: 'high' },
+        { lessonId: 17, standardIds: ['oh-17'], required: true, priority: 'high' },
+        { lessonId: 15, standardIds: ['oh-26'], required: true, priority: 'high' },
+        { lessonId: 16, standardIds: ['oh-26'], required: true, priority: 'high' },
+        
+        // Credit and Debt
+        { lessonId: 22, standardIds: ['oh-19'], required: true, priority: 'high' },
+        { lessonId: 23, standardIds: ['oh-19'], required: true, priority: 'high' },
+        { lessonId: 28, standardIds: ['oh-19'], required: true, priority: 'medium' },
+        { lessonId: 25, standardIds: ['oh-20'], required: true, priority: 'medium' },
+        { lessonId: 29, standardIds: ['oh-20'], required: true, priority: 'medium' },
+        { lessonId: 30, standardIds: ['oh-21'], required: true, priority: 'high' },
+        { lessonId: 31, standardIds: ['oh-21'], required: true, priority: 'high' },
+        { lessonId: 32, standardIds: ['oh-21'], required: true, priority: 'medium' },
+        { lessonId: 24, standardIds: ['oh-21'], required: true, priority: 'high' },
+        { lessonId: 25, standardIds: ['oh-22'], required: true, priority: 'medium' },
+        { lessonId: 26, standardIds: ['oh-22'], required: true, priority: 'high' },
+        { lessonId: 27, standardIds: ['oh-22'], required: true, priority: 'high' },
+        { lessonId: 35, standardIds: ['oh-23'], required: true, priority: 'medium' },
+        { lessonId: 36, standardIds: ['oh-23'], required: true, priority: 'medium' },
+        { lessonId: 37, standardIds: ['oh-23'], required: true, priority: 'high' },
+        
+        // Risk Management and Insurance
+        { lessonId: 45, standardIds: ['oh-24'], required: true, priority: 'high' },
+        { lessonId: 46, standardIds: ['oh-24', 'oh-27'], required: true, priority: 'high' },
+        { lessonId: 47, standardIds: ['oh-24', 'oh-27'], required: true, priority: 'medium' },
+        { lessonId: 48, standardIds: ['oh-27'], required: true, priority: 'medium' },
+        { lessonId: 49, standardIds: ['oh-27'], required: true, priority: 'medium' },
+        { lessonId: 50, standardIds: ['oh-27'], required: true, priority: 'medium' }
       ]
     }
   ];
@@ -335,6 +412,27 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
   const isLessonRequiredByState = (lessonId: number): boolean => {
     const mapping = getLessonStateMapping(lessonId);
     return mapping ? mapping.required : false;
+  };
+
+  const isLessonNotRequiredByState = (lessonId: number): boolean => {
+    if (selectedState !== 'OH') return false;
+    
+    // Ohio lessons that are NOT required according to the summary
+    const ohioNotRequiredLessons = [5, 8, 12, 33, 34, 39, 63, 64]; // Beware of Banking Fees, Challenges to Saving, What is the Stock Market?, Paying for College 101, Applying for the FAFSA, Time for Payback, Your Money & Social Media, Advertisements & Dark Patterns
+    return ohioNotRequiredLessons.includes(lessonId);
+  };
+
+  const getStandardsNotAddressed = (): StateStandard[] => {
+    if (selectedState !== 'OH') return [];
+    
+    // Ohio standard not addressed by NGPF curriculum
+    return [{
+      id: 'oh-8',
+      code: 'PM.3',
+      title: 'Financial Expert Guidance',
+      description: 'Financial experts provide guidance and advice on a wide variety of financial issues',
+      required: true
+    }];
   };
 
   const calculateAvailableTime = () => {
@@ -1334,6 +1432,46 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                     ))}
                   </div>
                 </div>
+                
+                {selectedState === 'OH' && (
+                  <div className="space-y-4">
+                    <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-700">
+                      <h4 className="text-sm font-semibold text-orange-800 dark:text-orange-200 mb-2 flex items-center gap-2">
+                        <AlertTriangle size={16} />
+                        Standards NOT Addressed by NGPF Curriculum
+                      </h4>
+                      <p className="text-xs text-orange-700 dark:text-orange-300 mb-2">
+                        You will need additional resources to meet the following standards:
+                      </p>
+                      {getStandardsNotAddressed().map(standard => (
+                        <div key={standard.id} className="flex items-center gap-2 text-xs">
+                          <span className="inline-flex px-2 py-1 rounded text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200">
+                            {standard.code}
+                          </span>
+                          <span className="text-orange-700 dark:text-orange-300">
+                            {standard.description}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
+                      <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                        Lessons NOT Required by Ohio Standards
+                      </h4>
+                      <p className="text-xs text-blue-700 dark:text-blue-300 mb-2">
+                        These lessons may be included or removed for pacing purposes:
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {allLessons.filter(lesson => isLessonNotRequiredByState(lesson.id)).map(lesson => (
+                          <div key={lesson.id} className="text-xs text-blue-700 dark:text-blue-300">
+                            • {lesson.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })()}
@@ -1565,6 +1703,11 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                             {isLessonRequiredByState(lesson.id) && lesson.required === 'No' && (
                               <div className="text-xs text-red-600 dark:text-red-400 mt-1">
                                 Required by {getCurrentState().name}
+                              </div>
+                            )}
+                            {isLessonNotRequiredByState(lesson.id) && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                Not required by {getCurrentState().name}
                               </div>
                             )}
                           </td>
