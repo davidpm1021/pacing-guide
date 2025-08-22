@@ -3,17 +3,16 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+    if: github.ref == 'refs/heads/main'
     
     steps:
     - name: Checkout
@@ -41,4 +40,5 @@ jobs:
         
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4 
+      uses: actions/deploy-pages@v4
+      if: github.ref == 'refs/heads/main' 
