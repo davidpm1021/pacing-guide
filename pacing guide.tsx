@@ -78,10 +78,167 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
   // State standards data
   const statesData: State[] = [
     {
-      code: 'ALL',
-      name: 'All States (Default)',
-      standards: [],
-      lessonMappings: []
+      code: 'NATIONAL',
+      name: 'National Standards',
+      standards: [
+        // EARNING INCOME
+        { id: 'ei-12.1', code: '12.1', title: 'Compensation and Employee Benefits', description: 'Compensation for a job or career can be in the form of wages, salaries, commissions, tips, or bonuses, and may also include contributions to employee benefits', required: true },
+        { id: 'ei-12.2', code: '12.2', title: 'Intangible Job Benefits', description: 'In addition to wages and paid benefits, employees may also value intangible (noncash) benefits', required: true },
+        { id: 'ei-12.3', code: '12.3', title: 'Education and Training Investment', description: 'People vary in their opportunity and willingness to incur the present costs of additional training and education', required: true },
+        { id: 'ei-12.4', code: '12.4', title: 'Wage Determination', description: 'Employers generally pay higher wages or salaries to more educated, skilled, and productive workers', required: true },
+        { id: 'ei-12.5', code: '12.5', title: 'Economic Conditions Impact', description: 'Changes in economic conditions, technology, or the labor market can cause changes in income, career opportunities, or employment status', required: true },
+        { id: 'ei-12.6', code: '12.6', title: 'Tax Types and Government Revenue', description: 'Federal, state, and local taxes fund government-provided goods, services, and transfer payments to individuals', required: true },
+        { id: 'ei-12.7', code: '12.7', title: 'Tax Variation by Income and Spending', description: 'The type and amount of taxes people pay depend on their sources of income, amount of income, and amount and type of spending', required: true },
+        { id: 'ei-12.8', code: '12.8', title: 'Unearned Income and Capital Gains', description: 'Interest, dividends, and capital appreciation (gains) are examples of unearned income derived from financial investments', required: true },
+        { id: 'ei-12.9', code: '12.9', title: 'Tax Deductions and Credits', description: 'Tax deductions and credits reduce income tax liability', required: true },
+        { id: 'ei-12.10', code: '12.10', title: 'Retirement Income Sources', description: 'Retirement income typically comes from some combination of continued employment earnings, Social Security, employer sponsored retirement plans, and personal investments', required: true },
+        { id: 'ei-12.11', code: '12.11', title: 'Small Business Ownership', description: 'Owning a small business can be a person\'s primary career or can supplement income from other sources', required: false },
+
+        // SPENDING
+        { id: 'sp-12.1', code: '12.1', title: 'Budgeting for Financial Goals', description: 'A budget helps people achieve their financial goals by allocating income to necessary and desired spending, saving, and philanthropy', required: true },
+        { id: 'sp-12.2', code: '12.2', title: 'Consumer Decision Influences', description: 'Consumer decisions are influenced by the price of products or services, the price of alternatives, the consumer\'s budget and preferences', required: true },
+        { id: 'sp-12.3', code: '12.3', title: 'Durable Goods Purchasing', description: 'When purchasing a good that is expected to be used for a long time, consumers consider the product\'s durability, maintenance costs, and various product features', required: true },
+        { id: 'sp-12.4', code: '12.4', title: 'Price Advertising and Negotiation', description: 'Consumers may be influenced by how prices of goods and services are advertised, and whether prices are fixed or negotiable', required: true },
+        { id: 'sp-12.5', code: '12.5', title: 'Consumer Information Search', description: 'Consumers incur costs and realize benefits when searching for information related to the purchase of goods and services', required: true },
+        { id: 'sp-12.6', code: '12.6', title: 'Housing Decisions', description: 'Housing decisions depend on individual preferences, circumstances, and costs, and can impact personal satisfaction and financial well-being', required: true },
+        { id: 'sp-12.7', code: '12.7', title: 'Charitable Giving', description: 'People donate money, items, or time to charitable and nonprofit organizations because they value the services provided', required: false },
+        { id: 'sp-12.8', code: '12.8', title: 'Consumer Protection', description: 'Federal and state laws, regulations, and consumer protection agencies can help individuals avoid unsafe products, unfair practices, and marketplace fraud', required: true },
+        { id: 'sp-12.9', code: '12.9', title: 'Financial Record-Keeping', description: 'Having an organized system for keeping track of spending, saving, and investing makes it easier to make financial decisions', required: true },
+
+        // SAVING
+        { id: 'sv-12.1', code: '12.1', title: 'Savings Account Types', description: 'Financial institutions offer several types of savings accounts, including regular savings, money market accounts, and certificates of deposit', required: true },
+        { id: 'sv-12.2', code: '12.2', title: 'Interest Rates and Market Conditions', description: 'Deposit account interest rates and fees vary between financial institutions and depend on market conditions and competition', required: true },
+        { id: 'sv-12.3', code: '12.3', title: 'Mobile Payments and Cryptocurrency', description: 'Unless offered by insured financial institutions, mobile payment accounts and cryptocurrency accounts are not federally insured', required: true },
+        { id: 'sv-12.4', code: '12.4', title: 'Inflation Impact on Savings', description: 'Inflation can erode the value of savings if the interest rate earned on a savings account is less than the inflation rate', required: true },
+        { id: 'sv-12.5', code: '12.5', title: 'Financial Institution Regulation', description: 'Government agencies such as the Federal Reserve, the FDIC, and the NCUA supervise and regulate financial institutions', required: true },
+        { id: 'sv-12.6', code: '12.6', title: 'Tax-Advantaged Savings', description: 'Tax policies that allow people to save pretax earnings or to reduce or defer taxes on interest earned provide incentives for people to save', required: true },
+        { id: 'sv-12.7', code: '12.7', title: 'Employer Retirement and Health Savings', description: 'Employer defined contribution retirement plans and health savings accounts can provide incentives for employees to save', required: true },
+        { id: 'sv-12.8', code: '12.8', title: 'Financial Communication in Relationships', description: 'People can reduce the potential for future financial strife with a partner or spouse by sharing personal financial information', required: false },
+        { id: 'sv-12.9', code: '12.9', title: 'Psychological Obstacles to Saving', description: 'There are many strategies that can help people manage psychological, emotional, and external obstacles to saving', required: true },
+
+        // INVESTING
+        { id: 'in-12.1', code: '12.1', title: 'Investment Risk Tolerance', description: 'A person\'s investment risk tolerance depends on factors such as personality, financial resources, investment experiences, and life circumstances', required: true },
+        { id: 'in-12.2', code: '12.2', title: 'Investment Returns and Cash Flows', description: 'Investors earn investment returns from price changes and annual cash flows (such as interest, dividends or rent)', required: true },
+        { id: 'in-12.3', code: '12.3', title: 'Risk and Return Relationship', description: 'Investors expect to earn higher rates of return when they invest in riskier assets', required: true },
+        { id: 'in-12.4', code: '12.4', title: 'Real vs Nominal Returns', description: 'Because inflation reduces purchasing power over time, the real return on a financial asset is lower than its nominal return', required: true },
+        { id: 'in-12.5', code: '12.5', title: 'Asset Price Factors', description: 'The prices of financial assets change in response to market conditions, interest rates, company performance, new information, and investor demand', required: true },
+        { id: 'in-12.6', code: '12.6', title: 'Diversification and Asset Allocation', description: 'When making diversification and asset allocation decisions, investors consider their risk tolerance, goals, and investing time horizon', required: true },
+        { id: 'in-12.7', code: '12.7', title: 'Investment Expenses', description: 'Expenses of buying, selling, and holding financial assets decrease the rate of return from an investment', required: true },
+        { id: 'in-12.8', code: '12.8', title: 'Tax Effects on Investments', description: 'Tax rules affect the rate of return on different investments, and can vary by holding period, type of income, and type of account', required: true },
+        { id: 'in-12.9', code: '12.9', title: 'Behavioral Investment Biases', description: 'Common behavioral biases can result in investors making decisions that adversely affect their investment outcomes', required: true },
+        { id: 'in-12.10', code: '12.10', title: 'Financial Technology in Investing', description: 'Financial technology can counterbalance negative behavioral factors when making investment decisions', required: false },
+        { id: 'in-12.11', code: '12.11', title: 'Discount Brokerage Services', description: 'Many investors buy and sell financial assets through discount brokerage firms that provide inexpensive investment services', required: true },
+        { id: 'in-12.12', code: '12.12', title: 'Financial Market Regulation', description: 'Federal regulation of financial markets is designed to ensure that investors have access to accurate information', required: true },
+        { id: 'in-12.13', code: '12.13', title: 'Investment Benchmarking', description: 'Investors often compare the performance of their investments against a benchmark, such as a diversified stock or bond index', required: true },
+        { id: 'in-12.14', code: '12.14', title: 'Financial Professional Selection', description: 'Criteria for selecting financial professionals for investment advice include licensing, certifications, education, experience, and cost', required: false },
+
+        // MANAGING CREDIT
+        { id: 'mc-12.1', code: '12.1', title: 'Credit Cost Comparison', description: 'Borrowers can compare the cost of credit using the Annual Percentage Rate (APR) and other terms in the loan or credit card contract', required: true },
+        { id: 'mc-12.2', code: '12.2', title: 'Secured vs Unsecured Loans', description: 'Loans that are secured by collateral have lower interest rates than unsecured loans because they are less risky to lenders', required: true },
+        { id: 'mc-12.3', code: '12.3', title: 'Mortgage Payment Factors', description: 'Monthly mortgage payments vary depending on the amount borrowed, the repayment period, and the interest rate', required: true },
+        { id: 'mc-12.4', code: '12.4', title: 'Education Financing', description: 'Post-secondary education is often financed by students and families through a combination of scholarships, grants, student loans, work-study, and savings', required: true },
+        { id: 'mc-12.5', code: '12.5', title: 'Federal vs Private Student Loans', description: 'Federal student loans have lower rates and more favorable repayment terms than private student loans', required: true },
+        { id: 'mc-12.6', code: '12.6', title: 'Down Payments', description: 'Down payments reduce the amount needed to borrow', required: true },
+        { id: 'mc-12.7', code: '12.7', title: 'Credit Reports and Credit Bureaus', description: 'Lenders assess creditworthiness of potential borrowers by consulting credit reports compiled by credit bureaus', required: true },
+        { id: 'mc-12.8', code: '12.8', title: 'Credit Scores', description: 'A credit score is a numeric rating that assesses a person\'s credit risk based on information in their credit report', required: true },
+        { id: 'mc-12.9', code: '12.9', title: 'Credit Report Usage', description: 'Credit reports and credit scores may be requested and used by entities other than lenders', required: true },
+        { id: 'mc-12.10', code: '12.10', title: 'Debt Management Assistance', description: 'Borrowers who face negative consequences because they are unable to repay their debts may be able to seek debt management assistance', required: true },
+        { id: 'mc-12.11', code: '12.11', title: 'Bankruptcy Options', description: 'In extreme cases, bankruptcy may be an option for people who are unable to repay their debts', required: false },
+        { id: 'mc-12.12', code: '12.12', title: 'Consumer Credit Protection', description: 'Consumer credit protection laws govern disclosure of credit terms, discrimination in borrowing, and debt collection practices', required: true },
+        { id: 'mc-12.13', code: '12.13', title: 'Alternative Financial Services', description: 'Alternative financial services, such as payday loans, check cashing services, pawnshops, and instant tax refunds', required: true },
+
+        // MANAGING RISK
+        { id: 'mr-12.1', code: '12.1', title: 'Risk Tolerance and Insurance', description: 'People vary with respect to their willingness to accept risk and in how much they are willing to pay for insurance', required: true },
+        { id: 'mr-12.2', code: '12.2', title: 'Insurance Purchase Decisions', description: 'The decision to buy insurance depends on perceived risk exposure, the price of insurance coverage, and individual characteristics', required: true },
+        { id: 'mr-12.3', code: '12.3', title: 'Mandatory Insurance Coverage', description: 'Some types of insurance coverage are mandatory', required: true },
+        { id: 'mr-12.4', code: '12.4', title: 'Insurance Premium Factors', description: 'Insurance premiums are lower for people who take actions to reduce the likelihood and/or financial cost of losses', required: true },
+        { id: 'mr-12.5', code: '12.5', title: 'Health Insurance Coverage', description: 'Health insurance provides coverage for medically necessary health care and may also cover some preventive care', required: true },
+        { id: 'mr-12.6', code: '12.6', title: 'Disability Insurance', description: 'Disability insurance replaces income lost when a person is unable to earn their regular income due to injury or illness', required: false },
+        { id: 'mr-12.7', code: '12.7', title: 'Property and Liability Insurance', description: 'Auto, homeowner\'s and renter\'s insurance reimburse policyholders for financial losses to their covered property', required: true },
+        { id: 'mr-12.8', code: '12.8', title: 'Life Insurance', description: 'Life insurance provides funds for beneficiaries in the event of an insured person\'s death', required: false },
+        { id: 'mr-12.9', code: '12.9', title: 'Public Insurance Programs', description: 'Unemployment insurance, Medicaid, and Medicare are public insurance programs that protect individuals from economic hardship', required: true },
+        { id: 'mr-12.10', code: '12.10', title: 'Insurance Fraud', description: 'Insurance fraud is a crime that encompasses illegal actions by the buyer or seller of an insurance contract', required: false },
+        { id: 'mr-12.11', code: '12.11', title: 'Identity Theft and Privacy', description: 'Online transactions and failure to safeguard personal documents can make consumers vulnerable to privacy infringement', required: true },
+        { id: 'mr-12.12', code: '12.12', title: 'Extended Warranties', description: 'Extended warranties and service contracts are like an insurance policy', required: false }
+      ],
+      lessonMappings: [
+        // EARNING INCOME lessons
+        { lessonId: 40, standardIds: ['ei-12.3'], required: false, priority: 'medium' }, // Career Exploration (3a)
+        { lessonId: 41, standardIds: ['ei-12.1', 'ei-12.2'], required: true, priority: 'high' }, // Finding a Job (1a, 1b, 2b, 2c)
+        { lessonId: 44, standardIds: ['ei-12.1', 'ei-12.2', 'ei-12.9'], required: false, priority: 'medium' }, // Starting a New Job (1b, 1d, 2c, 9a)
+        { lessonId: 51, standardIds: ['ei-12.6', 'ei-12.7'], required: false, priority: 'medium' }, // Taxes and Your Paystub (6b, 6c, 7c)
+        { lessonId: 52, standardIds: ['ei-12.9'], required: true, priority: 'high' }, // The Tax Cycle and Job Paperwork (9a)
+        { lessonId: 53, standardIds: ['ei-12.8', 'ei-12.11'], required: true, priority: 'high' }, // Teens and Taxes (8a, 11a)
+        { lessonId: 54, standardIds: ['ei-12.7', 'ei-12.8', 'ei-12.9'], required: true, priority: 'high' }, // How to File Your Taxes (7d, 8a, 9b, 9c)
+        { lessonId: 55, standardIds: ['ei-12.6'], required: false, priority: 'medium' }, // Time to File (6a)
+        { lessonId: 19, standardIds: ['ei-12.10'], required: true, priority: 'high' }, // The Importance of Investing for Retirement (10a, 10b, 10d)
+        { lessonId: 20, standardIds: ['ei-12.10'], required: true, priority: 'high' }, // How to Invest for Retirement (10c)
+
+        // SPENDING lessons
+        { lessonId: 0, standardIds: ['sv-12.9'], required: false, priority: 'medium' }, // Your Values and Money (9a)
+        { lessonId: 7, standardIds: ['sp-12.1'], required: false, priority: 'medium' }, // Strategies to Save (1a, 1b, 1c)
+        { lessonId: 56, standardIds: ['sp-12.1'], required: true, priority: 'high' }, // Budgeting Basics (1b, 1d)
+        { lessonId: 58, standardIds: ['sp-12.1'], required: false, priority: 'medium' }, // Budgeting Strategies (1b, 1c)
+        { lessonId: 59, standardIds: ['sp-12.1', 'sp-12.6'], required: false, priority: 'medium' }, // Budgeting for Housing (1b, 6a, 6b)
+        { lessonId: 60, standardIds: ['sp-12.1', 'sp-12.2'], required: false, priority: 'medium' }, // Budgeting for Transportation (1c, 2b)
+        { lessonId: 61, standardIds: ['sp-12.1', 'sp-12.2', 'sp-12.4'], required: true, priority: 'high' }, // Budgeting for Food (1b, 2b, 4a, 4b)
+        { lessonId: 62, standardIds: ['sp-12.1', 'sp-12.9'], required: false, priority: 'medium' }, // Build Your Budget (1b, 1d, 9b)
+        { lessonId: 63, standardIds: ['sp-12.2', 'sp-12.5', 'sv-12.8', 'sv-12.9'], required: false, priority: 'medium' }, // Your Money & Social Media (2a, 2c, 5c, 8b, 9a, 9b, 9c)
+        { lessonId: 64, standardIds: ['sp-12.2', 'sp-12.5'], required: true, priority: 'high' }, // Advertisements & Dark Patterns (2a, 5c)
+        { lessonId: 65, standardIds: ['sp-12.2', 'sp-12.3', 'sp-12.5'], required: false, priority: 'medium' }, // Comparison Shopping (2a, 2b, 2c, 3a, 5a, 5b)
+        { lessonId: 37, standardIds: ['sp-12.2'], required: true, priority: 'high' }, // Financial Aid Packages (2a, 2b)
+        { lessonId: 10, standardIds: ['sp-12.9'], required: false, priority: 'medium' }, // Online and Mobile Banking (9c)
+
+        // SAVING lessons
+        { lessonId: 4, standardIds: ['sv-12.1'], required: true, priority: 'high' }, // Savings Accounts (1a, 1b, 2a)
+        { lessonId: 5, standardIds: ['sv-12.2'], required: true, priority: 'high' }, // Beware of Banking Fees (2a, 3b)
+        { lessonId: 3, standardIds: ['sv-12.5'], required: false, priority: 'medium' }, // Checking Accounts (5a, 5c)
+        { lessonId: 6, standardIds: ['ei-12.5'], required: false, priority: 'medium' }, // Being Unbanked (5b)
+        { lessonId: 8, standardIds: ['sv-12.4', 'sv-12.9'], required: false, priority: 'medium' }, // Challenges to Saving (4b, 9a, 9b, 9c)
+        { lessonId: 9, standardIds: ['sv-12.3'], required: true, priority: 'high' }, // Digital Wallets & P2P Apps (3a, 3b)
+
+        // INVESTING lessons
+        { lessonId: 11, standardIds: ['in-12.1', 'in-12.2', 'in-12.3', 'in-12.4'], required: false, priority: 'medium' }, // Why Should I Invest? (1a, 1b, 2b, 3a, 4a, 6a)
+        { lessonId: 12, standardIds: ['in-12.2', 'in-12.5', 'in-12.13'], required: false, priority: 'medium' }, // What is the Stock Market? (2a, 2b, 5a, 5b, 5c, 13a)
+        { lessonId: 13, standardIds: ['in-12.2', 'in-12.3', 'in-12.5'], required: true, priority: 'high' }, // What is a Stock? (2a, 2b, 3b, 5a, 5b)
+        { lessonId: 14, standardIds: ['in-12.2', 'in-12.3', 'in-12.5'], required: false, priority: 'medium' }, // What is a Bond? (2b, 3d, 5d)
+        { lessonId: 15, standardIds: ['in-12.1', 'in-12.3', 'in-12.6'], required: true, priority: 'high' }, // Managing Risk (1b, 3a, 6c)
+        { lessonId: 16, standardIds: ['in-12.6', 'in-12.13'], required: true, priority: 'high' }, // Investing in Funds (6b, 13a, 13b)
+        { lessonId: 17, standardIds: ['in-12.6', 'in-12.7', 'in-12.13'], required: true, priority: 'high' }, // Deep Dive into Funds (6b, 7a, 7b, 7c, 13c)
+        { lessonId: 18, standardIds: ['in-12.1', 'in-12.6', 'in-12.9', 'in-12.10', 'in-12.11'], required: false, priority: 'medium' }, // Start Investing (1a, 1c, 6a, 9a, 10b, 11b)
+        { lessonId: 21, standardIds: ['in-12.10', 'in-12.11'], required: true, priority: 'high' }, // Modern Investing (10a, 11a, 11c)
+        { lessonId: 1, standardIds: ['in-12.9'], required: false, priority: 'medium' }, // Your Brain and Money (9a, 9b)
+        { lessonId: 2, standardIds: ['in-12.9'], required: false, priority: 'medium' }, // Overcoming Cognitive Biases (9a, 9b)
+
+        // MANAGING CREDIT lessons
+        { lessonId: 22, standardIds: ['mc-12.1', 'mc-12.2', 'mc-12.6'], required: false, priority: 'medium' }, // Intro to Credit (1a, 1b, 2a, 6d)
+        { lessonId: 23, standardIds: ['mc-12.1', 'mc-12.8', 'mc-12.12'], required: true, priority: 'high' }, // Young People & Credit Cards (1a, 8b, 12a)
+        { lessonId: 24, standardIds: ['mc-12.1', 'mc-12.10'], required: true, priority: 'high' }, // Using Credit Cards Wisely (1b, 10a)
+        { lessonId: 25, standardIds: ['mc-12.1', 'mc-12.13'], required: false, priority: 'medium' }, // Loan Fundamentals (1b, 13b)
+        { lessonId: 26, standardIds: ['mc-12.1', 'mc-12.2', 'mc-12.6'], required: true, priority: 'high' }, // Auto Loans (1b, 2a, 2c, 6a, 6c)
+        { lessonId: 27, standardIds: ['mc-12.2', 'mc-12.3', 'mc-12.6'], required: true, priority: 'high' }, // Mortgages (2a, 2c, 3a, 3b, 3c, 6a, 6c)
+        { lessonId: 28, standardIds: ['mc-12.1', 'mc-12.10', 'mc-12.13'], required: false, priority: 'medium' }, // Predatory Lending (1b, 10a, 10c, 13a, 13b, 13c)
+        { lessonId: 29, standardIds: ['mc-12.10'], required: false, priority: 'medium' }, // Debt Management (10a, 10c)
+        { lessonId: 30, standardIds: ['mc-12.7', 'mc-12.9'], required: true, priority: 'high' }, // Your Credit Report (7a, 7b, 7c, 7d, 9a)
+        { lessonId: 31, standardIds: ['mc-12.8', 'mc-12.9'], required: true, priority: 'high' }, // Your Credit Score (8a, 8b, 8c)
+        { lessonId: 32, standardIds: ['mc-12.8', 'mc-12.9'], required: false, priority: 'medium' }, // Building Credit from Scratch (3c, 8c, 9b)
+        { lessonId: 33, standardIds: ['mc-12.4'], required: false, priority: 'medium' }, // Paying for College 101 (4a, 4c)
+        { lessonId: 34, standardIds: ['mc-12.4', 'mc-12.5'], required: true, priority: 'high' }, // Applying for the FAFSA (4a, 4b, 5b)
+        { lessonId: 35, standardIds: ['mc-12.4'], required: false, priority: 'medium' }, // Scholarships and Grants (4a, 4c)
+        { lessonId: 36, standardIds: ['mc-12.4', 'mc-12.5'], required: false, priority: 'medium' }, // Student Loans (4a, 5a)
+        { lessonId: 38, standardIds: ['mc-12.5'], required: true, priority: 'high' }, // Student Loan Repayment (5a, 5b, 5d)
+        { lessonId: 39, standardIds: ['mc-12.5'], required: true, priority: 'high' }, // Time for Payback (5c, 5d)
+
+        // MANAGING RISK lessons
+        { lessonId: 45, standardIds: ['mr-12.1', 'mr-12.12'], required: false, priority: 'medium' }, // Intro to Insurance (1a, 12a, 12b)
+        { lessonId: 46, standardIds: ['mr-12.3', 'mr-12.4', 'mr-12.7'], required: true, priority: 'high' }, // Auto Insurance (3b, 3c, 4a, 4b, 4c, 7a, 7b)
+        { lessonId: 47, standardIds: ['mr-12.2', 'mr-12.3', 'mr-12.7'], required: false, priority: 'medium' }, // Renters & Homeowners Insurance (2a, 2b, 3a, 7a, 7b, 7c)
+        { lessonId: 48, standardIds: ['mr-12.1', 'mr-12.5'], required: false, priority: 'medium' }, // How Health Insurance Works (1a, 1b, 5b, 5c)
+        { lessonId: 49, standardIds: ['mr-12.2', 'mr-12.5', 'mr-12.9'], required: false, priority: 'medium' }, // How to Access Health Insurance (2b, 5a, 9b)
+        { lessonId: 50, standardIds: ['mr-12.1', 'mr-12.2', 'mr-12.8'], required: false, priority: 'medium' }, // Other Types of Insurance (1b, 2b, 8a, 8b)
+        { lessonId: 66, standardIds: ['mr-12.11'], required: false, priority: 'medium' }, // Identity Theft (11a, 11b, 11c, 11d)
+        { lessonId: 67, standardIds: ['mr-12.11'], required: true, priority: 'high' } // Scams & Fraud (11a, 11b, 11c)
+      ]
     },
     {
       code: 'CA',
@@ -432,7 +589,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
     {id: 67, name: "Scams & Fraud", unit: "Consumer Skills", activity1: "PLAY: Spot the Scam Signs", activity2: "", required: "Yes", nonActivityTime: 31, activityTime: 25, totalTime: 56}
   ];
 
-  const [selectedState, setSelectedState] = useState<string>('ALL');
+  const [selectedState, setSelectedState] = useState<string>('NATIONAL');
   const [settings, setSettings] = useState({
     classPeriodMinutes: 50,
     totalSchoolDays: 90,
@@ -719,7 +876,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
 
   // Update lesson settings when state changes
   useEffect(() => {
-    if (selectedState !== 'ALL') {
+    if (selectedState !== 'NATIONAL') {
       const currentState = getCurrentState();
       const newLessonSettings = { ...lessonSettings };
       
@@ -1035,7 +1192,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
             ))}
           </select>
           
-          {selectedState !== 'ALL' && (
+          {selectedState !== 'NATIONAL' && (
             <div className="flex items-center gap-2 ml-4 text-sm text-blue-600 dark:text-blue-400">
               <Award size={16} />
               <span>
@@ -1376,7 +1533,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
       )}
 
       {/* Standards Coverage Dashboard */}
-      {selectedState !== 'ALL' && results?.lessons && (
+                  {selectedState !== 'NATIONAL' && results?.lessons && (
         <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 p-6">
           <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <Award className="text-blue-600 dark:text-blue-400" size={24} />
@@ -1567,7 +1724,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                     <tr>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Lesson</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                      {selectedState !== 'ALL' && (
+                      {selectedState !== 'NATIONAL' && (
                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Standards</th>
                       )}
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Activities</th>
@@ -1614,7 +1771,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                                 Combined Activities
                               </span>
                             </td>
-                            {selectedState !== 'ALL' && (
+                            {selectedState !== 'NATIONAL' && (
                               <td className="px-6 py-4">
                                 <div className="space-y-1">
                                   {getLessonStandards(lesson.id).map(standard => (
@@ -1752,7 +1909,7 @@ const LessonByLessonPacingGuide = ({ darkMode, setDarkMode }: LessonByLessonPaci
                               </div>
                             )}
                           </td>
-                          {selectedState !== 'ALL' && (
+                          {selectedState !== 'NATIONAL' && (
                             <td className="px-6 py-4">
                               <div className="space-y-1">
                                 {getLessonStandards(lesson.id).map(standard => (
